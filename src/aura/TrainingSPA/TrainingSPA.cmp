@@ -1,0 +1,36 @@
+<aura:component controller="TrainingHome" extends="c:TrainingBase" implements="flexipage:availableForAllPageTypes">
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:handler name="change" value="{!v.selectedPathId}" action="{!c.pathIdChanged}" />
+    <aura:handler name="change" value="{!v.endpoint}" action="{!c.endpointChanged}" />
+    <aura:handler event="c:PathCompletedEvt" action="{!c.refreshUserInfo}" />
+    
+    <aura:attribute name="selectedPathId" type="Id" default=""/>
+    <aura:attribute name="selectedStepId" type="Id" default=""/>
+    <aura:attribute name="userinfo" type="object" />
+    <aura:attribute name="endpoint" type="String" default="" />
+    <aura:attribute name="paths" type="object" />
+    <aura:attribute name="endpoints" type="object" />
+
+    <div id="content" class="slds-m-around_medium">
+        <lightning:layout horizontalAlign="slds-grid_align-space" class="main-grid">
+            <lightning:layoutItem size="9" class="bg-white">
+                <lightning:layout horizontalAlign="slds-grid_align-space">
+                    <lightning:layoutItem class="{!empty(v.selectedPathId)?'':'hidden'}">
+                        <c:TrainingHome endpoint="{!v.endpoint}" selectedPathId="{!v.selectedPathId}" paths="{!v.paths}" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="{!(!empty(v.selectedPathId) &amp;&amp; empty(v.selectedStepId))?'':'hidden'}">
+                        <c:TrainingPath endpoint="{!v.endpoint}" pathId="{!v.selectedPathId}" selectedStepId="{!v.selectedStepId}" />
+                    </lightning:layoutItem>
+                    <lightning:layoutItem class="{!empty(v.selectedStepId)?'hidden':''}">
+                        <c:TrainingStepDetail endpoint="{!v.endpoint}" pathId="{!v.selectedPathId}" stepId="{!v.selectedStepId}" />
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="3" class="bg-white">
+                <c:TrainingSidebar userinfo="{!v.userinfo}" endpoints="{!v.endpoints}" endpoint="{!v.endpoint}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+    <c:TrainingWorking />
+</aura:component>

@@ -1,0 +1,170 @@
+public with sharing class DataAccessor {
+    public static List<Training_Path__c> GetUserAccessibleTrainingPaths(List<Training_Path__c> paths,
+                                                                        Id userId)
+    {
+        List<Training_Path__c> results=new List<Training_Path__c>();
+
+        User us=[select id, Email from User where id=:userId];
+        String domain=us.Email.split('@')[1];
+        List<Training_Path_Candidate_Restriction__c> tpcrs=
+                        [select id, Candidate_Restriction__r.Include_Emails__c, 
+                                    Candidate_Restriction__r.Exclude_Emails__c,
+                                    Training_Path__c
+                         from Training_Path_Candidate_Restriction__c
+                         where Candidate_Restriction__r.Domain__c=:domain
+                         and Training_Path__c in :paths];
+
+        // only one Training_Path_Candidate_Restriction__c per domain
+        Map<Id, Training_Path_Candidate_Restriction__c> tpcrByPathId=new 
+                    Map<Id, Training_Path_Candidate_Restriction__c>();
+
+        for (Training_Path_Candidate_Restriction__c tpcr : tpcrs)
+        {
+            tpcrByPathId.put(tpcr.Training_Path__c, tpcr);
+        }
+
+        for (Training_Path__c path : paths)
+        {
+            Training_Path_Candidate_Restriction__c tpcr=tpcrByPathId.get(path.id);
+            // default is allow access unless there is a restriction
+            Boolean emailOkay=true;
+            if (null!=tpcr)
+            {
+
+                if (null!=tpcr.Candidate_Restriction__r.Include_Emails__c) 
+                {
+                    // don't allow unless named
+                    emailOkay=false;
+                    List<String> includes=tpcr.Candidate_Restriction__r.Include_Emails__c.split(',');
+                    Set<String> includesSet=new Set<String>();
+                    includesSet.addAll(includes);
+                    if (includesSet.contains(us.Email))
+                    {
+                        emailOkay=true;
+                    }
+                }
+                else if (null!=tpcr.Candidate_Restriction__r.Exclude_Emails__c) 
+                {
+                    // allow unless named
+                    emailOkay=true;
+                    List<String> excludes=tpcr.Candidate_Restriction__r.Include_Emails__c.split(',');
+                    Set<String> excludesSet=new Set<String>();
+                    excludesSet.addAll(excludes);
+                    if (excludesSet.contains(us.Email))
+                    {
+                        emailOkay=false;
+                    }
+                }   
+            }
+        
+            if (emailOkay)
+            {
+                results.add(path);
+            }
+        }
+
+        return results;
+    }
+
+    public static Training_Path__c GetTrainingPath(String pathIdStr) 
+    {
+        return GetTrainingPaths(new List<Id> {(Id) pathIdStr})[0];
+    }
+
+    public static List<Training_Path__c> GetTrainingPaths(List<Id> pathIds) 
+    {
+        List<Training_Path__c> paths=[select id, Name, Description__c, Badge__c,
+                                      (select id, Name, Description__c from Training_Steps__r)
+                                      from Training_Path__c
+                                      where id IN :pathIds];
+        return paths;        
+    }
+
+    public static Candidate_Path__c GetOrCreateCandidatePath(Id pathId, Id userId)
+    {
+        Training_Path__c path=GetTrainingPath(pathId);
+        return GetOrCreateCandidatePath(path, userId);
+    }
+
+    public static Candidate_Path__c GetOrCreateCandidatePath(Training_Path__c path, Id userId)
+    {
+        Candidate_Path__c result=null;
+        List<Candidate_Path__c> cps=[select id, Complete__c,
+                                     (select id, Complete__c, Training_Step__r.Index__c,
+                                     Training_Step__r.Name, Training_Step__r.Description__c,
+                                     Training_Step__r.Complete__c
+                                      from Candidate_Steps__r
+                                      order by Training_Step__r.Index__c asc)
+                                     from Candidate_Path__c
+                                     where Training_Path__c=:path.Id
+                                     and OwnerId=:userId];
+        if (cps.IsEmpty())
+        {
+            Candidate_Path__c cp=new Candidate_Path__c(Training_Path__c=path.Id);
+            insert cp;
+            List<Candidate_Step__c> cSteps=new List<Candidate_Step__c>();
+            for (Training_Step__c step : path.Training_Steps__r)
+            {
+                Candidate_Step__c cStep=new Candidate_Step__c(Candidate_Path__c=path.Id,
+                                                             Training_Step__c=step.Id);
+                cSteps.add(cStep);
+            }
+
+            insert cSteps;
+            // call this function again to query out the new records.
+            result=GetOrCreateCandidatePath(path, userId);
+        }
+        else 
+        {
+            result=cps[0];
+        }
+
+        return result;
+    }
+
+    public static Training_Step__c GetTrainingStep(String stepIdStr)
+    {
+        Training_Step__c step=[select id, Name, Description__c, 
+                                    Heading_1__c, Content_1__c,
+                                    Heading_2__c, Content_2__c,
+                                    Heading_3__c, Content_3__c,
+                                    Heading_4__c, Content_4__c,
+                                    Heading_5__c, Content_5__c
+                               from Training_Step__c
+                               where id=:stepIdStr
+                               ];
+
+        return step;
+    }
+
+    public static Candidate_Step__c GetCandidateStep(String stepIdStr, Id userId)
+    {
+        Candidate_Step__c step=[select id, Complete__c 
+                                from Candidate_Step__c
+                                where Training_Step__c=:stepIdStr
+                                  and Candidate_Path__r.OwnerId=:userId];
+
+        return step;
+    }
+
+    public static List<Training_Question__c> GetTrainingStepQuestions(String stepIdStr) 
+    {
+        List<Training_Question__c> questions=[select id, Index__c,
+                                                Question__c, Correct_Answer_Index__c,
+                                              (select Answer__c, Index__c
+                                               from Training_Answers__r
+                                               order by Index__c asc) 
+                                              from Training_Question__c
+                                              where Training_Step__c=:stepIdStr 
+                                              order by Index__c asc];
+
+        return questions;
+    }
+    
+    public static List<Candidate_Badge__c> GetUserBadges()
+    {
+        return [select Id, Name, Badge__r.Name
+                from Candidate_Badge__c 
+                where User__c=:UserInfo.getUserId()];
+    }
+}

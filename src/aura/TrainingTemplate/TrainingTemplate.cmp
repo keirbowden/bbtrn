@@ -1,0 +1,6 @@
+<aura:component extensible="true" extends="c:TrainingBase">
+    <c:TrainingHeader />
+    <div id="content" style="margin-top: 50px" class="slds-m-around_medium">
+        {!v.body}
+    </div>
+</aura:component>

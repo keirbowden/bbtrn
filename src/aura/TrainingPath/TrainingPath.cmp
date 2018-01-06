@@ -1,0 +1,27 @@
+<aura:component extends="c:TrainingBase" controller="TrainingHome">
+
+    <aura:attribute name="endpoint" type="String" />
+    <aura:attribute name="pathId" type="Id" />
+    <aura:attribute name="path" type="object" />
+    <aura:attribute name="selectedStepId" type="Id" />
+    <aura:handler name="change" value="{!v.pathId}" action="{!c.pathIdChanged}" />
+    <aura:handler event="c:StepCompletedEvt" action="{!c.stepCompleted}" />
+
+    <aura:set attribute="body">
+        <nav class="slds-nav-vertical slds-p-bottom_medium" aria-label="Sub page">
+            <div class="slds-nav-vertical__section">
+                <ul>
+                    <li class="slds-nav-vertical__item">
+                        <a href="javascript:void(0);" onclick="{!c.backToPaths}" class="slds-nav-vertical__action" 
+                            aria-describedby="entity-header" aria-current="page">Back to Paths</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="slds-p-around_medium">
+            <aura:iteration items="{!v.path.steps}" var="step">
+                <c:TrainingStep step="{!step}" selectedStepId="{!v.selectedStepId}" />
+            </aura:iteration>
+        </div>
+    </aura:set>
+</aura:component>

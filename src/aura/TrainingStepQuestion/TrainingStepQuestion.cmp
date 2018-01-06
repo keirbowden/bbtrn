@@ -1,0 +1,29 @@
+<aura:component >
+    <aura:attribute name="question" type="object" />
+    <div class="slds-p-bottom_medium">
+        <div class="slds-text-body_regular slds-p-bottom_small slds-float_left">
+            {!v.question.label}.
+        </div>
+        <div class="slds-text-body_regular slds-p-bottom_small slds-p-left_medium">
+            <lightning:formattedRichText value="{!v.question.question}" />
+        </div>
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-no-row-hover">
+            <tbody>
+                <aura:iteration items="{!v.question.answers}" var="answer">
+                    <tr onclick="{!c.answerClicked}" data-answeridx="{!answer.idx}">
+                        <td data-label="answer" class="{!answer.state}">
+                            <div class="slds-text-body_regular">
+                                {!answer.label}.
+                            </div>
+                        </td>
+                        <td data-label="answer" class="{!answer.state}">
+                            <div class="slds-text-body_regular">
+                                <lightning:formattedRichText value="{!answer.answer}" />
+                            </div>
+                        </td>
+                    </tr>
+                </aura:iteration>
+            </tbody>
+        </table>
+    </div>
+</aura:component>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fields>
+        <fullName>Service_Implementation__c</fullName>
+        <defaultValue>&apos;TrainingServiceRemoteImpl&apos;</defaultValue>
+        <description>The name of the class implementing the training service interface,</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>Service Implementation</label>
+        <length>80</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Training Config</label>
+    <pluralLabel>Training Configs</pluralLabel>
+    <visibility>Protected</visibility>
+</CustomObject>

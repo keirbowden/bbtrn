@@ -1,0 +1,11 @@
+.THIS .hidden{
+    display:none;
+}
+
+.THIS .bg-white{
+    background-color: rgb(243, 242, 242); 
+}
+
+.THIS .main-grid {
+    min-height: 500px;
+}

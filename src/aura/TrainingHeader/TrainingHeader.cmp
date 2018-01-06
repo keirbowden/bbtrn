@@ -1,0 +1,46 @@
+<aura:component extends="c:TrainingBase" controller="TrainingHome">
+
+    <aura:attribute name="userinfo" type="object" /> 
+    <aura:handler event="c:PathCompletedEvt" action="{!c.refreshUserInfo}" />
+
+    <div class="slds-page-header">
+        <div class="slds-grid slds-grid_align-spread">
+            <div class="slds-global-header__item">
+                <div class="slds-global-header__logo">
+                    <lightning:avatar src="/images/logo-noname.svg" alternativeText="Home" initials="{!v.userinfo.initials}" fallbackIconName="standard:account"
+                    />
+                </div>
+            </div>
+            <div class="slds-global-header__item slds-global-header__item_search">
+                <div aria-expanded="false" aria-haspopup="listbox" class="slds-form-element slds-lookup" role="combobox">
+                    <label class="slds-assistive-text" for="global-search-01">Search</label>
+                    <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_left-right">
+                        <input type="text" aria-activedescendant="" aria-autocomplete="list" aria-controls="global-search-list-01" autocomplete="off"
+                            class="slds-input slds-lookup__search-input" id="global-search-01" placeholder="Search" role="textbox"
+                        />
+                    </div>
+                </div>
+            </div>
+            <ul class="slds-global-header__item slds-grid slds-grid_vertical-align-center">
+                <li class="slds-grid">
+                    <button class="slds-button slds-button_icon slds-button_icon slds-button_icon-container slds-button_icon-small slds-global-header__button_icon-favorites"
+                        aria-pressed="false" title="Toggle Favorites">
+                        <lightning:icon iconName="utility:favorite" size="x-small" alternativeText="Favourite"/>
+                        <span class="slds-assistive-text">Toggle Favorite</span>
+                    </button>
+                    <span class="slds-dropdown-trigger slds-dropdown-trigger_click">
+                        <button class="slds-button slds-button_icon slds-button_icon slds-button_icon-container slds-button_icon-small slds-global-header__button_icon slds-m-left_none"
+                            title="View Favorites">
+                            <lightning:icon iconName="utility:chevrondown" size="x-small" alternativeText="Dropdown"/>
+                            <span class="slds-assistive-text">View Favorites</span>
+                        </button>
+                    </span>
+                </li>
+                <div class="slds-m-left_small">
+                    <p class="slds-text-body_small slds-line-height_reset">{!v.userinfo.badges} badges</p>
+                    <p class="slds-text-body_small slds-line-height_reset">{!v.userinfo.points} points</p>
+                </div>
+            </ul>
+        </div>
+    </div>
+</aura:component>

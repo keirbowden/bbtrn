@@ -1,0 +1,70 @@
+<aura:component controller="TrainingHome" extends="c:TrainingBase">
+    <aura:attribute name="endpoint" type="String" />
+    <aura:attribute name="pathId" type="String" />
+    <aura:attribute name="stepId" type="String" />
+    <aura:attribute name="path" type="object" />
+    <aura:attribute name="step" type="object" />
+    <aura:attribute name="answeredCorrectly" type="Boolean" default="false" />
+    <aura:attribute name="completedPath" type="Boolean" default="false:" />
+
+    <aura:handler name="change" value="{!v.stepId}" action="{!c.stepIdChanged}" />
+
+    <aura:registerEvent name="pathCompleteEvent" type="c:PathCompletedEvt" />
+    <aura:registerEvent name="stepCompleteEvent" type="c:StepCompletedEvt" />
+    
+    <nav class="slds-nav-vertical slds-p-bottom_medium" aria-label="Sub page">
+        <div class="slds-nav-vertical__section">
+            <ul>
+                <li class="slds-nav-vertical__item">
+                    <a href="javascript:void(0);" onclick="{!c.backToPath}" class="slds-nav-vertical__action" aria-describedby="entity-header"
+                        aria-current="page">Back to Path</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="slds-p-around_small">
+        <div class="slds-text-heading_large">{!v.step.name}</div>
+        <lightning:formattedRichText value="{!v.step.content1}" class="slds-text-body_regular" />
+    </div>
+
+    <aura:iteration items="{!v.step.sections}" var="section">
+        <div class="slds-p-around_small">
+            <div class="slds-text-heading_medium">{!section.heading}</div>
+            <lightning:formattedRichText value="{!section.content}" class="slds-text-body_regular" />
+        </div>
+    </aura:iteration>
+
+    <div class="slds-p-around_small">
+        <aura:if isTrue="{!v.completedPath}">
+            You have completed the {!v.path.name} training path - Congratulations
+            <lightning:button onclick="{!c.backToPaths}" label="More paths" />
+            <aura:set attribute="else">
+                <aura:if isTrue="{!v.answeredCorrectly}">
+                    Congratulations - you've passed the step!
+                    <aura:set attribute="else">
+                        <aura:if isTrue="{!v.step.complete}">
+                            <p>You have already completed this step.</p>
+                            <aura:set attribute="else">
+                                <lightning:card class="slds-p-around_small">
+                                    <aura:set attribute="title">
+                                        <div class="slds-text-heading_medium slds-p-bottom_small">Question Time</div>
+                                    </aura:set>
+                                    <aura:set attribute="footer">
+                                        <lightning:button label="Judge Me!" onclick="{!c.checkAnswers}" />
+                                    </aura:set>
+                                    <aura:iteration items="{!v.step.questions}" var="question">
+                                        <c:TrainingStepQuestion question="{!question}" />
+                                    </aura:iteration>
+                                </lightning:card>
+                            </aura:set>
+                        </aura:if>
+
+                    </aura:set>
+
+                </aura:if>
+
+            </aura:set>
+        </aura:if>
+    </div>
+</aura:component>

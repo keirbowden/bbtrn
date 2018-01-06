@@ -1,0 +1,17 @@
+<aura:component >
+    <aura:attribute name="endpoint" type="String" default="" />
+    <aura:attribute name="endpoints" type="object" />
+    <aura:attribute name="userinfo" type="object" />
+
+    <div class="slds-m-around_medium">
+        <div class="slds-p-bottom_small">Endpoint : <strong>{!v.endpoint}</strong></div>
+        <div class="slds-p-bottom_small">{!v.userinfo.badges} badge(s)</div>
+        <lightning:select name="selEndpoint" label="Choose an endpoint" required="true"
+                            value="{!v.endpoint}">
+            <aura:iteration items="{!v.endpoints}" var="ep">
+                <option value="{!ep}" text="{!ep}"></option>
+            </aura:iteration>
+        </lightning:select>
+    </div>
+
+</aura:component>

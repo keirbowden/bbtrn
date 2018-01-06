@@ -1,0 +1,14 @@
+<aura:component extends="c:TrainingBase" implements="flexipage:availableForAllPageTypes">
+
+    <aura:attribute name="endpoint" type="String" default="" />
+    <aura:attribute name="selectedPathId" type="Id" />
+    <aura:attribute name="paths" type="object" />
+
+    <lightning:layout multipleRows="true">
+        <aura:iteration items="{!v.paths}" var="path">
+            <lightning:layoutItem size="3" class="slds-m-around_large">
+                <c:TrainingPathTile path="{!path}" selectedPathId="{!v.selectedPathId}" />
+            </lightning:layoutItem>
+         </aura:iteration>
+    </lightning:layout>
+</aura:component>
