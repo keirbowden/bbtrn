@@ -7,23 +7,17 @@
         <div class="slds-text-body_regular slds-p-bottom_small slds-p-left_medium">
             <lightning:formattedRichText value="{!v.question.question}" />
         </div>
-        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-no-row-hover">
-            <tbody>
-                <aura:iteration items="{!v.question.answers}" var="answer">
-                    <tr onclick="{!c.answerClicked}" data-answeridx="{!answer.idx}">
-                        <td data-label="answer" class="{!answer.state}">
-                            <div class="slds-text-body_regular">
-                                {!answer.label}.
-                            </div>
-                        </td>
-                        <td data-label="answer" class="{!answer.state}">
-                            <div class="slds-text-body_regular">
-                                <lightning:formattedRichText value="{!answer.answer}" />
-                            </div>
-                        </td>
-                    </tr>
-                </aura:iteration>
-            </tbody>
-        </table>
+        <lightning:layout multipleRows="true">
+            <aura:iteration items="{!v.question.answers}" var="answer">
+                <lightning:layoutItem size="1" padding="horizontal-medium" class="{!answer.state + ' slds-m-bottom_medium'}">
+                    <span onclick="{!c.answerClicked}" data-answeridx="{!answer.idx}">{!answer.label}.</span>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="11" class="{!answer.state + ' slds-m-bottom_medium'}">
+                    <span onclick="{!c.answerClicked}" data-answeridx="{!answer.idx}">
+                        <lightning:formattedRichText value="{!answer.answer}" />
+                    </span>
+                </lightning:layoutItem>
+            </aura:iteration>
+        </lightning:layout>
     </div>
 </aura:component>

@@ -5,6 +5,9 @@
     checkAnswers : function(component, event, helper) {
         helper.checkAnswers(component, event);
     },
+    markStepComplete : function(component, event, helper) {
+        helper.markStepComplete(component, event);
+    },
     backToPath : function(component, event, helper) {
         helper.backToPath(component, event);
     },

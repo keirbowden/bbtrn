@@ -48,15 +48,21 @@
                 break;
     	}
     	
-    	var toastEvent=$A.get("e.force:showToast");
-    	toastEvent.setParams({
-    		"type":severity,
-    		"title":title,
-    		"message":message,
-    		"duration":duration,
-    		"mode":mode
-    	});
-    	toastEvent.fire();
+        var toastEvent=$A.get("e.force:showToast");
+        if (toastEvent) {
+            toastEvent.setParams({
+                "type":severity,
+                "title":title,
+                "message":message,
+                "duration":duration,
+                "mode":mode
+            });
+        
+            toastEvent.fire();
+        }
+        else {
+            alert(severity + ' : ' + message);
+        }
     },
     showWorking : function(cmp, message) {
         this.fireWorking(cmp, true, message);

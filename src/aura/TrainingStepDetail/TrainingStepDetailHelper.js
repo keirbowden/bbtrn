@@ -27,6 +27,23 @@
                 answer.label=aLabels[aIdx];
             }
         }
+
+        if (null!=path.lastAttemptTimeMillis) {
+            // check if the user is blocked
+            var nextAttemptTime=new Date();
+            nextAttemptTime.setTime(path.lastAttemptTimeMillis + (path.hoursBetweenAttempts * 3600000));
+
+            var now=new Date();
+            if (nextAttemptTime>now) {
+                cmp.set('v.waiting', true);
+                cmp.set('v.nextAttemptTime', nextAttemptTime);
+            }
+        }
+        else {
+            cmp.set('v.waiting', false);
+            cmp.set('v.nextAttemptTime', null);
+        }
+
         cmp.set('v.path', path);
         cmp.set('v.step', step);
         cmp.set('v.completedPath', step.complete);
@@ -61,24 +78,61 @@
         }
         if (allAnswered) {
             if (allCorrect) {
-                step.complete=true;
-                cmp.set('v.answeredCorrectly', true);
-
-                var pathId=cmp.get('v.pathId');
-                var stepId=cmp.get('v.stepId');
-                var action=cmp.get('c.PassStep');
-                action.setParams({epName: cmp.get('v.endpoint'),
-                                  pathIdStr:pathId, 
-                                  stepIdStr:stepId});
-                var helper=this;
-                action.setCallback(helper, function(response) {
-                    helper.actionResponseHandler(response, cmp, helper, helper.passedStep);
-                });
-                $A.enqueueAction(action);
-                this.showWorking(cmp, 'Updating step');
+                this.markStepComplete(cmp, step);
+            }
+            else {
+                var path=cmp.get('v.path');
+                if (null!=path.hoursBetweenAttempts) {
+                    var pathId=cmp.get('v.pathId');
+                    var stepId=cmp.get('v.stepId');
+                                // the user failed and now must wait for another go
+                    var action=cmp.get('c.FailStepAndWait');
+                    action.setParams({epName: cmp.get('v.endpoint'),
+                                      pathIdStr:pathId, 
+                                      stepIdStr:stepId});
+                    var helper=this;
+                    action.setCallback(helper, function(response) {
+                        helper.actionResponseHandler(response, cmp, helper, helper.failedStep);
+                    });
+                    $A.enqueueAction(action);
+                    this.showWorking(cmp, 'Updating step');
+                }
             }
             cmp.set('v.step', step);
         }
+    },
+    failedStep : function(cmp, helper, failedPath) {
+        helper.hideWorking(cmp);
+        cmp.set('v.path', failedPath);
+
+        // TODO - copied from above
+        // block the user
+        var nextAttemptTime=new Date();
+        nextAttemptTime.setTime(failedPath.lastAttemptTimeMillis + (failedPath.hoursBetweenAttempts * 3600000));
+
+        var now=new Date();
+        if (nextAttemptTime>now) {
+            cmp.set('v.waiting', true);
+            cmp.set('v.nextAttemptTime', nextAttemptTime);
+        }
+    },
+    markStepComplete : function(cmp, step) {
+        step.complete=true;
+        cmp.set('v.answeredCorrectly', true);
+
+        var pathId=cmp.get('v.pathId');
+        var stepId=cmp.get('v.stepId');
+        var action=cmp.get('c.PassStep');
+        action.setParams({epName: cmp.get('v.endpoint'),
+                          pathIdStr:pathId, 
+                          stepIdStr:stepId});
+        var helper=this;
+        action.setCallback(helper, function(response) {
+            helper.actionResponseHandler(response, cmp, helper, helper.passedStep);
+        });
+        $A.enqueueAction(action);
+        this.showWorking(cmp, 'Updating step');
+        cmp.set('v.step', step);
     },
     passedStep : function(cmp, helper, completedPath) {
         helper.hideWorking(cmp);

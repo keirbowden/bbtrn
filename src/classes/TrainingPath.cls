@@ -7,6 +7,15 @@ public class TrainingPath
     public String name {get; set;}
 
     @AuraEnabled 
+    public String topics {get; set;}
+
+    @AuraEnabled 
+    public String summary {get; set;}
+
+    @AuraEnabled 
+    public String namespace {get; set;}
+
+    @AuraEnabled 
     public String description {get; set;}
 
     @AuraEnabled 
@@ -14,7 +23,13 @@ public class TrainingPath
 
     @AuraEnabled
     public Boolean complete {get; set;}
-    
+
+    @AuraEnabled
+    public Integer hoursBetweenAttempts {get; set;}
+
+    @AuraEnabled
+    public Long lastAttemptTimeMillis {get; set;}
+        
     @AuraEnabled
     public List<TrainingStep> steps {get; set;}
 
@@ -45,6 +60,12 @@ public class TrainingPath
 
         @AuraEnabled
         public List<TrainingStepQuestion> questions {get;set;}
+
+        @AuraEnabled
+        public Boolean adminMark {get; set;}
+
+        @AuraEnabled 
+        public Boolean selfMark {get; set;}
 
         public TrainingStep()
         {

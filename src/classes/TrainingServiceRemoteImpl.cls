@@ -17,7 +17,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
                                    DeveloperName,
                                    Hostname__c,
                                    Path__c,
-                                   Rewrite_Image_Links__c 
+                                   Rewrite_Image_Links__c
                             from Training_Endpoint__mdt
                             where DeveloperName=:endpointName];
             }
@@ -139,6 +139,20 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
         if (null!=json)
         {
             result=(Boolean) System.JSON.deserialize(json, Boolean.class);
+        }
+
+        return result;
+    }
+    
+    public TrainingPath FailStepAndWait(String epName, String pathIdStr, String stepIdStr)
+    {
+        endpointName=epName;
+        TrainingPath result;
+        String json=MakeRequest('POST', 'FailStepAndWait', '"pathIdStr":"' + pathIdStr + '","stepIdStr":"' + stepIdStr + '",');
+        System.debug('JSON = ' + json);
+        if (null!=json)
+        {
+            result=(TrainingPath) System.JSON.deserialize(json, TrainingPath.class);
         }
 
         return result;

@@ -1,17 +1,42 @@
-<aura:component >
+<aura:component>
     <aura:attribute name="endpoint" type="String" default="" />
     <aura:attribute name="endpoints" type="object" />
     <aura:attribute name="userinfo" type="object" />
+    <aura:attribute name="showBadgesModal" type="Boolean" default="false" />
 
     <div class="slds-m-around_medium">
-        <div class="slds-p-bottom_small">Endpoint : <strong>{!v.endpoint}</strong></div>
-        <div class="slds-p-bottom_small">{!v.userinfo.badges} badge(s)</div>
-        <lightning:select name="selEndpoint" label="Choose an endpoint" required="true"
-                            value="{!v.endpoint}">
+        <div class="slds-p-bottom_small">Endpoint :
+            <strong>{!v.endpoint}</strong>
+        </div>
+        <div class="slds-p-bottom_small">{!v.userinfo.badgeCount} badge(s)</div>
+        <div><lightning:button label="Show badges" onclick="{!c.showBadges}" /></div>
+        <lightning:select name="selEndpoint" label="Choose an endpoint" required="true" value="{!v.endpoint}">
             <aura:iteration items="{!v.endpoints}" var="ep">
                 <option value="{!ep}" text="{!ep}"></option>
             </aura:iteration>
         </lightning:select>
     </div>
-
+    <aura:if isTrue="{!v.showBadgesModal}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                        <lightning:icon class="slds-button__icon slds-button__icon_large" iconName="utility:close" size="medium" />
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Badges</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <aura:iteration items="{!v.userinfo.badges}" var="badge">
+                        {!badge.name}:{!badge.description}:{!badge.whenEarned}<br/>
+                    </aura:iteration>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral">Close</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
 </aura:component>

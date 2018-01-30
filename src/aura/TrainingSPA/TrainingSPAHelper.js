@@ -38,6 +38,8 @@
         }
     },
     endpointChanged : function(cmp, ev) {
+        cmp.set('v.selectedPathId', '');
+        cmp.set('v.selectedStepId', '');
         this.getDetailsFromEndpoint(cmp);
     },
     gotPaths : function(cmp, helper, paths) {

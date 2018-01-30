@@ -14,8 +14,8 @@
 
     <div id="content" class="slds-m-around_medium">
         <lightning:layout horizontalAlign="slds-grid_align-space" class="main-grid">
-            <lightning:layoutItem size="9" class="bg-white">
-                <lightning:layout horizontalAlign="slds-grid_align-space">
+            <lightning:layoutItem size="9" class="slds-p-right_xx-large bg-white">
+<!--                <lightning:layout horizontalAlign="slds-grid_align-space">
                     <lightning:layoutItem class="{!empty(v.selectedPathId)?'':'hidden'}">
                         <c:TrainingHome endpoint="{!v.endpoint}" selectedPathId="{!v.selectedPathId}" paths="{!v.paths}" />
                     </lightning:layoutItem>
@@ -25,7 +25,19 @@
                     <lightning:layoutItem class="{!empty(v.selectedStepId)?'hidden':''}">
                         <c:TrainingStepDetail endpoint="{!v.endpoint}" pathId="{!v.selectedPathId}" stepId="{!v.selectedStepId}" />
                     </lightning:layoutItem>
-                </lightning:layout>
+                </lightning:layout> -->
+
+                    <div class="{!empty(v.selectedPathId)?'':'hidden'}">
+                        <c:TrainingHome endpoint="{!v.endpoint}" selectedPathId="{!v.selectedPathId}" paths="{!v.paths}" />
+                    </div>
+                    <div class="{!(!empty(v.selectedPathId) &amp;&amp; empty(v.selectedStepId))?'':'hidden'}">
+                        <c:TrainingPath endpoint="{!v.endpoint}" pathId="{!v.selectedPathId}" selectedStepId="{!v.selectedStepId}" />
+                    </div>
+                    <div class="{!empty(v.selectedStepId)?'hidden':''}">
+                        <c:TrainingStepDetail endpoint="{!v.endpoint}" pathId="{!v.selectedPathId}" stepId="{!v.selectedStepId}" />
+                    </div>
+                
+
             </lightning:layoutItem>
             <lightning:layoutItem size="3" class="bg-white">
                 <c:TrainingSidebar userinfo="{!v.userinfo}" endpoints="{!v.endpoints}" endpoint="{!v.endpoint}" />

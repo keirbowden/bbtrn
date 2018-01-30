@@ -3,7 +3,7 @@ public with sharing class TrainingServiceLocalImpl implements TrainingServiceIF
     // Gets all the paths even if the user has completed them
     public List<TrainingPath> GetAllPaths(String epName)
     {
-        List<Training_Path__c> allPaths=[select id, Name 
+        List<Training_Path__c> allPaths=[select id, Name, Summary__c, Namespace__c, Topics__c 
                                      from Training_Path__c
                                      order by CreatedDate];
 
@@ -26,6 +26,9 @@ public with sharing class TrainingServiceLocalImpl implements TrainingServiceIF
         {
             TrainingPath path=new TrainingPath();
             path.name=tp.Name;
+            path.summary=tp.Summary__c;
+            path.namespace=tp.Namespace__c;
+            path.topics=tp.Topics__c;
             Decimal percentComplete=0;
             Candidate_Path__c cp=cpsByTPId.get(tp.Id);
             if (null!=cp)
@@ -52,6 +55,12 @@ public with sharing class TrainingServiceLocalImpl implements TrainingServiceIF
         TrainingPath path=new TrainingPath();
         path.pathId=trPath.Id;
         path.Name=trPath.Name;
+        path.summary=trPath.Summary__c;
+        path.namespace=trPath.Namespace__c;
+        path.topics=trPath.Topics__c;
+        System.debug('Hours between attempts = ' + trPath.Hours_Between_Attempts__c);
+        path.hoursBetweenAttempts=(null!=trPath.Hours_Between_Attempts__c?trPath.Hours_Between_Attempts__c.intValue():null);
+        path.lastAttemptTimeMillis=(null!=userPath.Last_Attempt_Time__c?userPath.Last_Attempt_Time__c.getTime():null);
         for (Candidate_Step__c cs : userPath.Candidate_Steps__r)
         {
             TrainingPath.TrainingStep step=new TrainingPath.TrainingStep();
@@ -72,16 +81,25 @@ public with sharing class TrainingServiceLocalImpl implements TrainingServiceIF
         System.debug('Step id = ' + stepIdStr);
         Training_Path__c trPath=DataAccessor.GetTrainingPath(pathIdStr);
 
+        Candidate_Path__c userPath=DataAccessor.GetOrCreateCandidatePath(trPath, UserInfo.getUserId());
+
         Training_Step__c trStep=DataAccessor.GetTrainingStep(stepIdStr);
 
         Candidate_Step__c cStep=DataAccessor.GetCandidateStep(stepIdStr, UserInfo.getUserId());
 
+        // TODO - this is a copy of code above - refactor into utility
         TrainingPath path=new TrainingPath();
         path.name=trPath.Name;
+        path.summary=trPath.Summary__c;
+        path.namespace=trPath.Namespace__c;
+        path.hoursBetweenAttempts=(null!=trPath.Hours_Between_Attempts__c?trPath.Hours_Between_Attempts__c.intValue():null);
+        path.lastAttemptTimeMillis=(null!=userPath.Last_Attempt_Time__c?userPath.Last_Attempt_Time__c.getTime():null);
 
         TrainingPath.TrainingStep step=new TrainingPath.TrainingStep();
         step.name=trStep.name;
+        step.id=trStep.id;
         step.complete=cStep.Complete__c;
+        step.adminMark=trStep.Admin_Mark__c;
 
         for (Integer idx=1; idx<=5; idx++)
         {
@@ -115,6 +133,8 @@ public with sharing class TrainingServiceLocalImpl implements TrainingServiceIF
             step.questions.add(question);
         }
 
+        step.selfMark=(!Step.adminMark && 0==step.questions.size());
+
         return path;
     }
 
@@ -135,6 +155,15 @@ public with sharing class TrainingServiceLocalImpl implements TrainingServiceIF
         return cPath.Complete__c;
     }
     
+    public TrainingPath FailStepAndWait(String epName, String pathIdStr, String stepIdStr)
+    {
+        Candidate_Path__c cPath=DataAccessor.GetOrCreateCandidatePath(pathIdStr, UserInfo.getUserId());
+        cPath.Last_Attempt_Time__c=System.now();
+        update cPath;
+        
+        return GetPath(epName, pathIdStr);
+    }
+    
     // Gets the user infomation, such as badges, points etc
     public TrainingUserInfo GetUserInfo(String epName)
     {
@@ -144,7 +173,16 @@ public with sharing class TrainingServiceLocalImpl implements TrainingServiceIF
         info.lastname=UserInfo.getLastName();
         info.initials=info.firstname.substring(0, 1) + info.lastname.substring(0, 1);
         info.points=12000;
-        info.badges=DataAccessor.getUserBadges().size();
+        List<Candidate_Badge__c> cBadges=DataAccessor.getUserBadges();
+        for (Candidate_Badge__c cBadge : cBadges)
+        {
+            TrainingUserInfo.UserBadge badge=new TrainingUserInfo.UserBadge();
+            badge.name=cBadge.Badge__r.Name;
+            badge.description=cBadge.Badge__r.Description__c;
+            badge.whenEarned=cBadge.CreatedDate;
+            info.badges.add(badge);
+        }
+        info.badgeCount=info.badges.size();
 
         return info;
     }

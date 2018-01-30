@@ -12,6 +12,18 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Hours_Between_Attempts__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Summary__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Namespace__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Description__c</field>
             </layoutItems>
             <layoutItems>
@@ -29,6 +41,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Badge__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Topics__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

@@ -47,7 +47,7 @@ public with sharing class DataAccessor {
                 {
                     // allow unless named
                     emailOkay=true;
-                    List<String> excludes=tpcr.Candidate_Restriction__r.Include_Emails__c.split(',');
+                    List<String> excludes=tpcr.Candidate_Restriction__r.Exclude_Emails__c.split(',');
                     Set<String> excludesSet=new Set<String>();
                     excludesSet.addAll(excludes);
                     if (excludesSet.contains(us.Email))
@@ -73,7 +73,8 @@ public with sharing class DataAccessor {
 
     public static List<Training_Path__c> GetTrainingPaths(List<Id> pathIds) 
     {
-        List<Training_Path__c> paths=[select id, Name, Description__c, Badge__c,
+        List<Training_Path__c> paths=[select id, Name, Summary__c, Namespace__c, Description__c, Badge__c, Topics__c,
+                                      Hours_Between_Attempts__c,
                                       (select id, Name, Description__c from Training_Steps__r)
                                       from Training_Path__c
                                       where id IN :pathIds];
@@ -89,7 +90,7 @@ public with sharing class DataAccessor {
     public static Candidate_Path__c GetOrCreateCandidatePath(Training_Path__c path, Id userId)
     {
         Candidate_Path__c result=null;
-        List<Candidate_Path__c> cps=[select id, Complete__c,
+        List<Candidate_Path__c> cps=[select id, Complete__c, Last_Attempt_Time__c,
                                      (select id, Complete__c, Training_Step__r.Index__c,
                                      Training_Step__r.Name, Training_Step__r.Description__c,
                                      Training_Step__r.Complete__c
@@ -105,7 +106,7 @@ public with sharing class DataAccessor {
             List<Candidate_Step__c> cSteps=new List<Candidate_Step__c>();
             for (Training_Step__c step : path.Training_Steps__r)
             {
-                Candidate_Step__c cStep=new Candidate_Step__c(Candidate_Path__c=path.Id,
+                Candidate_Step__c cStep=new Candidate_Step__c(Candidate_Path__c=cp.Id,
                                                              Training_Step__c=step.Id);
                 cSteps.add(cStep);
             }
@@ -125,6 +126,7 @@ public with sharing class DataAccessor {
     public static Training_Step__c GetTrainingStep(String stepIdStr)
     {
         Training_Step__c step=[select id, Name, Description__c, 
+                                    Admin_Mark__c,
                                     Heading_1__c, Content_1__c,
                                     Heading_2__c, Content_2__c,
                                     Heading_3__c, Content_3__c,
@@ -163,8 +165,24 @@ public with sharing class DataAccessor {
     
     public static List<Candidate_Badge__c> GetUserBadges()
     {
-        return [select Id, Name, Badge__r.Name
+        return [select Id, Name, Badge__r.Name, Badge__r.Description__c,
+                        CreatedDate
                 from Candidate_Badge__c 
                 where User__c=:UserInfo.getUserId()];
+    }
+
+    public static Training_Question__c GetQuestion(String questionIdStr) 
+    {
+        return [select id, Name, Question__c, Index__c
+                from Training_Question__c
+                where id=:questionIdStr];
+    }
+
+    public static List<Training_Answer__c> GetAnswers(Id questionId)
+    {
+        System.debug('Querying answers for question ' + questionId);
+        return [select Id, Name, Answer__c, Index__c
+                from Training_Answer__c 
+                where Training_Question__c=:questionId];
     }
 }

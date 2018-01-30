@@ -37,7 +37,7 @@
                     </span>
                 </li>
                 <div class="slds-m-left_small">
-                    <p class="slds-text-body_small slds-line-height_reset">{!v.userinfo.badges} badges</p>
+                    <p class="slds-text-body_small slds-line-height_reset">{!v.userinfo.badgeCount} badges</p>
                     <p class="slds-text-body_small slds-line-height_reset">{!v.userinfo.points} points</p>
                 </div>
             </ul>

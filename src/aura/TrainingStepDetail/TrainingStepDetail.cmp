@@ -5,13 +5,15 @@
     <aura:attribute name="path" type="object" />
     <aura:attribute name="step" type="object" />
     <aura:attribute name="answeredCorrectly" type="Boolean" default="false" />
-    <aura:attribute name="completedPath" type="Boolean" default="false:" />
+    <aura:attribute name="completedPath" type="Boolean" default="false" />
+    <aura:attribute name="waiting" type="Boolean" default="false" />
+    <aura:attribute name="nextAttemptTime" type="DateTime" />
 
     <aura:handler name="change" value="{!v.stepId}" action="{!c.stepIdChanged}" />
 
     <aura:registerEvent name="pathCompleteEvent" type="c:PathCompletedEvt" />
     <aura:registerEvent name="stepCompleteEvent" type="c:StepCompletedEvt" />
-    
+
     <nav class="slds-nav-vertical slds-p-bottom_medium" aria-label="Sub page">
         <div class="slds-nav-vertical__section">
             <ul>
@@ -24,16 +26,27 @@
     </nav>
 
     <div class="slds-p-around_small">
-        <div class="slds-text-heading_large">{!v.step.name}</div>
+        <div class="slds-text-heading_large">
+            <strong>{!v.step.name}</strong>
+        </div>
         <lightning:formattedRichText value="{!v.step.content1}" class="slds-text-body_regular" />
     </div>
 
-    <aura:iteration items="{!v.step.sections}" var="section">
-        <div class="slds-p-around_small">
-            <div class="slds-text-heading_medium">{!section.heading}</div>
-            <lightning:formattedRichText value="{!section.content}" class="slds-text-body_regular" />
-        </div>
-    </aura:iteration>
+    <div class="slds-p-around_medium">
+        <aura:iteration items="{!v.step.sections}" var="section">
+            <hr/>
+            <!--            <div class="slds-text-heading_medium slds-p-bottom_medium"><strong>{!section.heading}</strong></div> -->
+            <div class="slds-section slds-is-open">
+                <h3 class="slds-section__title slds-theme_inverse">
+                    <span class="slds-truncate slds-p-horizontal_small" title="{!section.heading}">{!section.heading}</span>
+                </h3>
+            </div>
+
+            <div class="slds-p-around_medium">
+                <lightning:formattedRichText value="{!section.content}" class="slds-text-body_regular" />
+            </div>
+        </aura:iteration>
+    </div>
 
     <div class="slds-p-around_small">
         <aura:if isTrue="{!v.completedPath}">
@@ -46,17 +59,48 @@
                         <aura:if isTrue="{!v.step.complete}">
                             <p>You have already completed this step.</p>
                             <aura:set attribute="else">
-                                <lightning:card class="slds-p-around_small">
-                                    <aura:set attribute="title">
-                                        <div class="slds-text-heading_medium slds-p-bottom_small">Question Time</div>
+                                <aura:if isTrue="{!v.waiting}">
+                                    You failed this path at the last attempt and must wait until {!v.nextAttemptTime}
+                                    <aura:set attribute="else">
+                                        <aura:if isTrue="{!v.step.selfMark}">
+                                            <lightning:card class="slds-p-around_small">
+                                                <aura:set attribute="footer">
+                                                    <lightning:button label="Mark Step Complete" onclick="{!c.markStepComplete}" />
+                                                </aura:set>
+                                                There are no questions for this step.
+                                            </lightning:card>
+                                            <aura:set attribute="else">
+                                                <aura:if isTrue="{!v.step.adminMark}">
+                                                    <lightning:card class="slds-p-around_small">
+                                                        <aura:set attribute="title">
+                                                            <div class="slds-text-heading_medium slds-p-bottom_small">
+                                                                <strong>Verification Required</strong>
+                                                            </div>
+                                                        </aura:set>
+                                                        An admin from the training content endpoint must mark this step as complete.
+                                                    </lightning:card>
+                                                    <aura:set attribute="else">
+                                                        <lightning:card class="slds-p-around_small">
+                                                            <aura:set attribute="title">
+                                                                <div class="slds-text-heading_medium slds-p-bottom_small">
+                                                                    <strong>Question Time</strong>
+                                                                </div>
+                                                            </aura:set>
+                                                            <aura:set attribute="footer">
+                                                                <lightning:button label="Judge Me!" onclick="{!c.checkAnswers}" />
+                                                            </aura:set>
+                                                            <aura:iteration items="{!v.step.questions}" var="question">
+                                                                <c:TrainingStepQuestion question="{!question}" />
+                                                            </aura:iteration>
+                                                        </lightning:card>
+                                                    </aura:set>
+                                                </aura:if>
+                                            </aura:set>
+                                        </aura:if>
+
                                     </aura:set>
-                                    <aura:set attribute="footer">
-                                        <lightning:button label="Judge Me!" onclick="{!c.checkAnswers}" />
-                                    </aura:set>
-                                    <aura:iteration items="{!v.step.questions}" var="question">
-                                        <c:TrainingStepQuestion question="{!question}" />
-                                    </aura:iteration>
-                                </lightning:card>
+                                </aura:if>
+
                             </aura:set>
                         </aura:if>
 

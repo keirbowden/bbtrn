@@ -1,5 +1,17 @@
 ({
-    myAction : function(component, event, helper) {
-
+    init : function(component, event, helper) {
+        helper.init(component, event);
+    },
+    addAnswer : function(component, event, helper) {
+        helper.addAnswer(component, event);
+    },
+    deleteAnswer : function(component, event, helper) {
+        helper.deleteAnswer(component, event);
+    },
+    save : function(component, event, helper) {
+        helper.save(component, event);
+    },
+    moveAnswer : function(component, event, helper) {
+        helper.moveAnswer(component, event);
     }
 })

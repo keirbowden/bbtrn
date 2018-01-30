@@ -1,14 +1,59 @@
-<aura:component >
+<aura:component>
     <aura:attribute name="path" type="object" />
     <aura:attribute name="selectedPathId" type="String" />
 
-    <lightning:button class="tile" onclick="{!c.clicked}">
+
+    <!--    <lightning:button class="tile" onclick="{!c.clicked}">
         <div>
             <h3 class="slds-tile__title slds-truncate" title="{!v.path.name}">
                 <a href="javascript:void(0);">{!v.path.percentComplete}% complete</a>
             </h3>
             <p class="slds-text-heading_medium">{!v.path.name}</p>
+            <p>{!v.path.summary}</p>
+            <div class="slds-text-body_small"><em>{!v.path.topics}</em></div>
         </div>
     </lightning:button>
+
+    <li class="slds-p-horizontal_small slds-size_1-of-1 slds-medium-size_1-of-3">
+        <a aria-describedby="drag-instructions" draggable="true" href="javascript:void(0);" class="slds-app-launcher__tile slds-text-link_reset"
+            onclick="{!c.clicked}">
+            <div class="slds-app-launcher__tile-figure">
+                <span class="slds-avatar slds-avatar_large">
+                    <abbr class="slds-avatar__initials slds-icon-custom-59" title="company name">{!v.path.namespace}</abbr>
+                </span>
+                <span class="slds-icon_container" title="Drag item to a new location">
+                </span>
+            </div>
+            <div class="slds-app-launcher__tile-body">
+                <div>{!v.path.percentComplete}% complete</div>
+                <p class="slds-text-heading_medium">{!v.path.name}</p>
+                <p>{!v.path.summary}</p>
+                <div class="slds-text-link">Topics:
+                    <em>{!v.path.topics}</em>
+                </div>
+            </div>
+        </a>
+    </li>
+-->
+    <lightning:layoutItem class="slds-size_1-of-1 slds-medium-size_1-of-3 slds-p-around_xx-large">
+        <div onclick="{!c.clicked}">
+            <lightning:card>
+                <aura:set attribute="title">
+                    <div class="slds-text-body_small slds-p-bottom_x-small slds-text-align_center">{!v.path.percentComplete}% complete</div>
+                    <div class="slds-text-heading_medium slds-p-bottom_small slds-text-align_center">
+                        <p class="slds-text-heading_medium">{!v.path.name}</p>
+                    </div>
+                </aura:set>
+                <aura:set attribute="footer">
+                    <div class="slds-text-link slds-text-align_left">Topics:
+                        <em>{!v.path.topics}</em>
+                    </div>
+                </aura:set>
+                <div class="slds-m-around_medium">{!v.path.summary}</div>
+            </lightning:card>
+
+        </div>
+
+    </lightning:layoutItem>
 
 </aura:component>

@@ -14,6 +14,9 @@ public interface TrainingServiceIF {
     // the user has passed the path, returns true
     Boolean PassStep(String epName, String pathIdStr, String stepIdStr);
     
+    // Marks a user as having failed a step which neans they have to wait to try again
+    TrainingPath FailStepAndWait(String epName, String pathIdStr, String stepIdStr);
+    
     // Gets the user infomation, such as badges, points etc
     TrainingUserInfo GetUserInfo(String epName);
 

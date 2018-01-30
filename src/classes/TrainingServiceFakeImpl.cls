@@ -1,4 +1,5 @@
-public with sharing class TrainingServiceFakeImpl implements TrainingServiceIF{
+public with sharing class TrainingServiceFakeImpl implements TrainingServiceIF
+{
     public List<TrainingPath> GetAllPaths(String epName)
     {
         List<TrainingPath> result=new List<TrainingPath>();
@@ -7,7 +8,10 @@ public with sharing class TrainingServiceFakeImpl implements TrainingServiceIF{
             TrainingPath path=new TrainingPath();
             path.pathId=''+idx;
             path.name='Test Path ' + idx;
+            path.summary='Test Path for POC';
+            path.namespace='TS';
             path.percentComplete=(Math.Random()*100).intValue();
+            path.topics='Test,Fake,Made Up';
             result.add(path);
         }
         
@@ -18,6 +22,8 @@ public with sharing class TrainingServiceFakeImpl implements TrainingServiceIF{
     {
         TrainingPath path=new TrainingPath();
         path.Name='Test Path ' + pathIdStr;
+        path.summary='Test path ' + pathIdStr + ' for POC';
+        path.namespace='TS';
         for (Integer idx=0; idx<5; idx++)
         {
             TrainingPath.TrainingStep step=new TrainingPath.TrainingStep();
@@ -100,7 +106,16 @@ public with sharing class TrainingServiceFakeImpl implements TrainingServiceIF{
         result.lastname=UserInfo.getLastName();
         result.initials=result.firstname.substring(0, 1) + result.lastname.substring(0, 1);
         result.points=25000;
-        result.badges=12;
+        result.badgeCount=12;
+
+        for (Integer idx=0; idx<12; idx++) 
+        {
+            TrainingUserInfo.UserBadge ub=new TrainingUserInfo.UserBadge();
+            ub.name='Test ' + idx;
+            ub.description='Test badge for Fake Service';
+            ub.whenEarned=System.now().addDays(-idx);
+            result.badges.add(ub);
+        }
         
         return result;
     }

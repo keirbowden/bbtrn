@@ -4,11 +4,29 @@
     <aura:attribute name="selectedPathId" type="Id" />
     <aura:attribute name="paths" type="object" />
 
-    <lightning:layout multipleRows="true">
+    <!--    <lightning:layout multipleRows="true">
         <aura:iteration items="{!v.paths}" var="path">
             <lightning:layoutItem size="3" class="slds-m-around_large">
                 <c:TrainingPathTile path="{!path}" selectedPathId="{!v.selectedPathId}" />
             </lightning:layoutItem>
          </aura:iteration>
+    </lightning:layout> -->
+
+    <!--    <div class="slds-app-launcher__content slds-p-around_medium">
+        <div class="slds-section slds-is-open">
+            <div aria-hidden="false" class="slds-section__content" id="appsContent">
+                <ul class="slds-grid slds-grid_pull-padded slds-wrap">
+                    <aura:iteration items="{!v.paths}" var="path">
+                        <c:TrainingPathTile path="{!path}" selectedPathId="{!v.selectedPathId}" />
+                    </aura:iteration>
+                </ul>
+            </div>
+        </div>
+    </div> -->
+
+    <lightning:layout horizontalAlign="slds-grid_align-space" class="main-grid">
+        <aura:iteration items="{!v.paths}" var="path">
+            <c:TrainingPathTile path="{!path}" selectedPathId="{!v.selectedPathId}" />
+        </aura:iteration>
     </lightning:layout>
 </aura:component>

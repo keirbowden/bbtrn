@@ -7,13 +7,20 @@ public with sharing class TrainingHome
                 Training_Config__mdt config = [select Service_Implementation__c 
                                                from Training_Config__mdt
                                                where DeveloperName='Default'];
+                System.debug('Implementation = ' + config.Service_Implementation__c);
                 Type tp=Type.forName(config.Service_Implementation__c);
+                System.debug('Type = ' + tp);
                 trainingService = (TrainingServiceIF) tp.newInstance(); 
             }
 
             return trainingService;
         }
-        set{}
+    }
+
+    @TestVisible
+    private static void SetTrainingService(TrainingServiceIF svc)
+    {
+        trainingService=svc;
     }
 
     @AuraEnabled
@@ -39,6 +46,13 @@ public with sharing class TrainingHome
     public static Boolean PassStep(String epName, String pathIdStr, String stepIdStr)
     {
         return trainingService.PassStep(epName, pathIdStr, stepIdStr);
+    }
+
+    // returns true if passing the step means the user completed the path
+    @AuraEnabled 
+    public static TrainingPath FailStepAndWait(String epName, String pathIdStr, String stepIdStr)
+    {
+        return trainingService.FailStepAndWait(epName, pathIdStr, stepIdStr);
     }
 
     @AuraEnabled
