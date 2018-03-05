@@ -21,5 +21,5 @@ public interface TrainingServiceIF {
     TrainingUserInfo GetUserInfo(String epName);
 
     // retrieves all defined endpoints. 
-    List<String> GetAllEndpoints();
+    List<TrainingEndpoint> GetAllEndpoints();
 }

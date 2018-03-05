@@ -93,6 +93,11 @@ public with sharing class TrainingServiceFakeImpl implements TrainingServiceIF
         return path;
     }
 
+    public TrainingPath FailStepAndWait(String epName, String pathIdStr, String stepIdStr)
+    {
+        return GetPath(epName, pathIdStr);
+    }
+    
     public Boolean PassStep(String epName, String pathIdStr, String stepIdStr)
     {
         return true;
@@ -120,8 +125,8 @@ public with sharing class TrainingServiceFakeImpl implements TrainingServiceIF
         return result;
     }
     
-    public List<String> GetAllEndpoints()
+    public List<TrainingEndpoint> GetAllEndpoints()
     {
-        return new List<String>{'default'};
+        return new List<TrainingEndpoint>{new TrainingEndpoint()};
     }
 }

@@ -66,7 +66,7 @@ private class TrainingHome_Test
     static void GetAllEndpoints_Test()
     {
         SetService();
-        List<String> eps=TrainingHome.GetAllEndpoints();
+        List<TrainingEndpoint> eps=TrainingHome.GetAllEndpoints();
         System.assertEquals(1, eps.size());
     }
 }

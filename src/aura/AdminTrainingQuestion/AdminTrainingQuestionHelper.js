@@ -20,11 +20,18 @@
         delete result.question.Training_Answers__r;
         cmp.set('v.question', result.question);
         if (0===result.answers.length) {
-            cmp.set('v.answers', [{Index__c:1, answer:''}]);
+            cmp.set('v.answers', [{Index__c:1, answer:''}]);s
             cmp.set('v.answerCount', 1);
         } 
         else {
             for (var idx=0, len=result.answers.length; idx<len; idx++) {
+                var answer=result.answers[idx];
+                if (answer.Index__c==result.question.Correct_Answer_Index__c){
+                    answer.Correct__c=true;
+                }
+                else {
+                    answer.Correct__c=false;
+                }
                 result.answers[idx].Index__c=idx+1;
             }
             cmp.set('v.answers', result.answers);
@@ -116,6 +123,9 @@
         question.sobjectType='Training_Question__c';
         for (var idx=0, len=answers.length; idx<len; idx++) {
             answers[idx].sobjectType='Training_Answer__c';
+            if (answers[idx].Correct__c) {
+                question.Correct_Answer_Index__c=answers[idx].Index__c;
+            }
         }
         var qanda={question: question,
                    answers : answers};

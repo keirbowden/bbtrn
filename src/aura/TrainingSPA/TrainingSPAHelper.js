@@ -55,7 +55,7 @@
     gotEndpoints : function(cmp, helper, endpoints) {
         console.log('Result = ' + JSON.stringify(endpoints));
         cmp.set('v.endpoints', endpoints);
-        cmp.set('v.endpoint', endpoints[0]);
+        cmp.set('v.endpoint', endpoints[0].name);
         helper.hideWorking(cmp);
     },
     getDetailsFromEndpoint : function(cmp) {

@@ -1,9 +1,22 @@
 public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF 
 {
+    public static final String GET_ALL_PATHS_METHOD='GetPaths';
+    public static final String GET_PATH_METHOD='GetPath';
+    public static final String GET_STEP_METHOD='GetStep';
+    public static final String PASS_STEP_METHOD='PassStep';
+    public static final String FAIL_STEP_AND_WAIT_METHOD='FailStepAndWait';
+    public static final String GET_USER_INFO_METHOD='GetUserInfo';
+
+    public static final String METHOD_PARAM='method';
+    public static final String EMAIL_PARAM='email';
+    public static final String PATH_ID_PARAM='pathIdStr';
+    public static final String STEP_ID_PARAM='stepIdStr';
+
     private static final String DEFAULT_ENDPOINT_NAME='Bob_Buzzard';
     private static String endpointName;
 
-    private static Training_Endpoint__mdt endpoint
+    @TestVisible
+    private static TrainingEndpoint endpoint
     { 
         get {
             if (null==endpoint)
@@ -13,19 +26,15 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
                     endpointName=DEFAULT_ENDPOINT_NAME;
                 }
                 System.debug('Getting endpoint for ' + endpointName);
-                endpoint = [select MasterLabel,
-                                   DeveloperName,
-                                   Hostname__c,
-                                   Path__c,
-                                   Rewrite_Image_Links__c
-                            from Training_Endpoint__mdt
-                            where DeveloperName=:endpointName];
+                endpoint = ConfigAccessor.GetEndpoint(endpointName);
             }
 
             return endpoint;
         }
           
-        set{}
+        set{
+            endpoint=value;
+        }
     }
 
     public String MakeRequest(String reqType, String method, String body)
@@ -35,8 +44,8 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
         HttpRequest req=new HttpRequest();
         req.setMethod(reqType);
         req.setHeader('Content-type', 'application/json');
-        req.setEndPoint(endpoint.Hostname__c + endpoint.Path__c);
-        String reqBody='{' + body + '"method":"' + method + '", "email":"' + UserInfo.getUserEmail() + '"}';
+        req.setEndPoint(endpoint.hostname + endpoint.path);
+        String reqBody='{' + body + '"' + METHOD_PARAM + '":"' + method + '", "' + EMAIL_PARAM + '":"' + UserInfo.getUserEmail() + '"}';
         req.setBody(reqBody);
         System.debug('Body = ' + reqBody);
         Http http=new Http();
@@ -48,14 +57,16 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
             {
                 result=resp.getBody();
                 System.debug('result = ' + result);
-                if (endpoint.Rewrite_Image_Links__c)
+                if (endpoint.rewriteImageLinks)
                 {
-                    result=result.replaceAll('/servlet/rtaImage',endpoint.Hostname__c + '/servlet/rtaImage');
+                    result=result.replaceAll('/servlet/rtaImage',endpoint.hostname + '/servlet/rtaImage');
                 }
             }
             else
             {
                 System.debug('Received response ' + statusCode);
+                System.debug('Body = ' + resp.getBody());
+                throw new AuraHandledException('An error occurred accessing the external training service');
             }
         }
         catch (System.CalloutException e)
@@ -66,19 +77,9 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
         return result;
     }
 
-    public List<String> GetAllEndpoints()
+    public List<TrainingEndpoint> GetAllEndpoints()
     {
-        List<Training_Endpoint__mdt> endpoints=
-                    [select DeveloperName
-                    from Training_Endpoint__mdt];
-  
-        List<String> result=new List<String>();
-        for (Training_Endpoint__mdt endpoint : endpoints)
-        {
-            result.add(endpoint.DeveloperName);
-        }
-
-        return result;
+        return ConfigAccessor.GetAllEndpoints();
     }
     
     // Gets all the paths even if the user has completed them
@@ -86,7 +87,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     {
         endpointName=epName;
         List<TrainingPath> paths;
-        String json=MakeRequest('POST', 'GetPaths', '');
+        String json=MakeRequest('POST', GET_ALL_PATHS_METHOD, '');
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -102,7 +103,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     {
         endpointName=epName;
         TrainingPath path=null;
-        String json=MakeRequest('POST', 'GetPath', '"pathIdStr":"' + pathIdStr + '",');
+        String json=MakeRequest('POST', GET_PATH_METHOD, '"' + PATH_ID_PARAM + '":"' + pathIdStr + '",');
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -118,7 +119,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     {
         endpointName=epName;
         TrainingPath path=null;
-        String json=MakeRequest('POST', 'GetStep', '"pathIdStr":"' + pathIdStr + '","stepIdStr":"' + stepIdStr + '",');
+        String json=MakeRequest('POST', 'GetStep', '"' + PATH_ID_PARAM + '":"' + pathIdStr + '","' + STEP_ID_PARAM + '":"' + stepIdStr + '",');
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -134,7 +135,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     {
         endpointName=epName;
         Boolean result=false;
-        String json=MakeRequest('POST', 'PassStep', '"pathIdStr":"' + pathIdStr + '","stepIdStr":"' + stepIdStr + '",');
+        String json=MakeRequest('POST', 'PassStep', '"' + PATH_ID_PARAM + '":"' + pathIdStr + '","' + STEP_ID_PARAM + '":"' + stepIdStr + '",');
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -148,7 +149,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     {
         endpointName=epName;
         TrainingPath result;
-        String json=MakeRequest('POST', 'FailStepAndWait', '"pathIdStr":"' + pathIdStr + '","stepIdStr":"' + stepIdStr + '",');
+        String json=MakeRequest('POST', 'FailStepAndWait', '"' + PATH_ID_PARAM + '":"' + pathIdStr + '","' + STEP_ID_PARAM + '":"' + stepIdStr + '",');
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -163,7 +164,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     {
         endpointName=epName;
         TrainingUserInfo info;
-        String json=MakeRequest('POST', 'GetUserInfo', '');
+        String json=MakeRequest('POST', GET_USER_INFO_METHOD, '');
         System.debug('JSON = ' + json);
         if (null!=json)
         {

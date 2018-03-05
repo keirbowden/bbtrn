@@ -24,7 +24,7 @@
         </div>
     </div> -->
 
-    <lightning:layout horizontalAlign="slds-grid_align-space" class="main-grid">
+    <lightning:layout horizontalAlign="slds-grid_align-space" class="main-grid slds-wrap">
         <aura:iteration items="{!v.paths}" var="path">
             <c:TrainingPathTile path="{!path}" selectedPathId="{!v.selectedPathId}" />
         </aura:iteration>

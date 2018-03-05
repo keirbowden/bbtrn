@@ -4,13 +4,7 @@ public with sharing class TrainingHome
         get{
             if (null==trainingService)
             {
-                Training_Config__mdt config = [select Service_Implementation__c 
-                                               from Training_Config__mdt
-                                               where DeveloperName='Default'];
-                System.debug('Implementation = ' + config.Service_Implementation__c);
-                Type tp=Type.forName(config.Service_Implementation__c);
-                System.debug('Type = ' + tp);
-                trainingService = (TrainingServiceIF) tp.newInstance(); 
+                trainingService=ConfigAccessor.GetTrainingServiceFromConfig();
             }
 
             return trainingService;
@@ -62,7 +56,7 @@ public with sharing class TrainingHome
     }
 
     @AuraEnabled
-    public static List<String> GetAllEndpoints()
+    public static List<TrainingEndpoint> GetAllEndpoints()
     {
         return trainingService.GetAllEndpoints();
     }

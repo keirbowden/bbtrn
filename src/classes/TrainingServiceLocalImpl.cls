@@ -187,8 +187,10 @@ public with sharing class TrainingServiceLocalImpl implements TrainingServiceIF
         return info;
     }
 
-    public List<String> GetAllEndpoints()
+    public List<TrainingEndpoint> GetAllEndpoints()
     {
-        return new List<String>{'default'};
+        TrainingEndpoint ep=new TrainingEndpoint();
+        ep.name='Default';
+        return new List<TrainingEndpoint>{ep};
     }
 }

@@ -173,7 +173,7 @@ public with sharing class DataAccessor {
 
     public static Training_Question__c GetQuestion(String questionIdStr) 
     {
-        return [select id, Name, Question__c, Index__c
+        return [select id, Name, Question__c, Index__c, Correct_Answer_Index__c
                 from Training_Question__c
                 where id=:questionIdStr];
     }

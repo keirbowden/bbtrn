@@ -6,13 +6,13 @@
 
     <div class="slds-m-around_medium">
         <div class="slds-p-bottom_small">Endpoint :
-            <strong>{!v.endpoint}</strong>
+            <strong>{!v.endpoint.name}</strong>
         </div>
         <div class="slds-p-bottom_small">{!v.userinfo.badgeCount} badge(s)</div>
-        <div><lightning:button label="Show badges" onclick="{!c.showBadges}" /></div>
+        <div><lightning:button label="Show badges" onclick="{!c.toggleBadges}" /></div>
         <lightning:select name="selEndpoint" label="Choose an endpoint" required="true" value="{!v.endpoint}">
             <aura:iteration items="{!v.endpoints}" var="ep">
-                <option value="{!ep}" text="{!ep}"></option>
+                <option value="{!ep.name}" text="{!ep.name}"></option>
             </aura:iteration>
         </lightning:select>
     </div>
@@ -21,7 +21,8 @@
             class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">
                 <header class="slds-modal__header">
-                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" 
+                            onclick="{!c.toggleBadges}">
                         <lightning:icon class="slds-button__icon slds-button__icon_large" iconName="utility:close" size="medium" />
                         <span class="slds-assistive-text">Close</span>
                     </button>
@@ -33,7 +34,7 @@
                     </aura:iteration>
                 </div>
                 <footer class="slds-modal__footer">
-                    <button class="slds-button slds-button_neutral">Close</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.toggleBadges}">Close</button>
                 </footer>
             </div>
         </section>

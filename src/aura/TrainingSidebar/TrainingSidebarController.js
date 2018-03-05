@@ -1,5 +1,5 @@
 ({
-    showBadges : function(component, event, helper) {
-        helper.showBadges(component, event);
+    toggleBadges : function(component, event, helper) {
+        helper.toggleBadges(component, event);
     }
 })
