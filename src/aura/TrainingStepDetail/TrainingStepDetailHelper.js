@@ -116,6 +116,20 @@
             cmp.set('v.nextAttemptTime', nextAttemptTime);
         }
     },
+    showModal: function(cmp, header, msg) {
+        var modalBody;
+        $A.createComponent("c:TrainingModal", {message:msg},
+                            function(content, status) {
+                                if (status === "SUCCESS") {
+                                    modalBody = content;
+                                    cmp.find('overlayLib').showCustomModal({
+                                        header: header,
+                                        body: modalBody, 
+                                        showCloseButton: true
+                                    })
+                                }
+                            });
+    },
     markStepComplete : function(cmp, step) {
         step.complete=true;
         cmp.set('v.answeredCorrectly', true);
@@ -142,6 +156,10 @@
             var pathCompletedEvt=$A.get("e.c:PathCompletedEvt");
             pathCompletedEvt.fire();
             cmp.set('v.completedPath', true);
+            helper.showModal(cmp, 'Congratulations', 'You have completed the path');
+        }
+        else {
+            helper.showModal(cmp, 'Congratulations', 'You have passed the step');
         }
     },
     backToPath : function(cmp, ev) {

@@ -1,0 +1,5 @@
+<aura:component>
+    <aura:attribute name="message" type="String" />
+    <lightning:icon size="medium" iconName="action:approval" alternativeText="Approved" class="slds-m-right_small" />
+    {!v.message}
+</aura:component>

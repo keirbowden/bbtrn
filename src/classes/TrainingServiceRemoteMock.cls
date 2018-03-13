@@ -27,20 +27,20 @@ global class TrainingServiceRemoteMock implements HttpCalloutMock
         if (TrainingServiceRemoteImpl.GET_ALL_PATHS_METHOD==method) 
         {
             List<TrainingPath> paths=new List<TrainingPath>();
-            paths.add(TrainingTestFixtures.GetPath(3));
-            paths.add(TrainingTestFixtures.GetPath(2));
+            paths.add(TrainingFixtures.GetPath(3));
+            paths.add(TrainingFixtures.GetPath(2));
             result=JSON.serialize(paths);
         }
         else if (TrainingServiceRemoteImpl.GET_PATH_METHOD==method) 
         {
             String pathIdStr=params.get(TrainingServiceRemoteImpl.PATH_ID_PARAM);
             System.assertNotEquals(null, pathIdStr, TrainingServiceRemoteImpl.GET_PATH_METHOD + ' must supply a path id');
-            TrainingPath path=TrainingTestFixtures.GetPath(5);
+            TrainingPath path=TrainingFixtures.GetPath(5);
             result=JSON.serialize(path);
         }
         else if (TrainingServiceRemoteImpl.GET_STEP_METHOD==method) 
         {
-            TrainingPath path=TrainingTestFixtures.GetPath(1);
+            TrainingPath path=TrainingFixtures.GetPath(1);
             result=JSON.serialize(path);
         }
         else if (TrainingServiceRemoteImpl.PASS_STEP_METHOD==method)
@@ -49,12 +49,12 @@ global class TrainingServiceRemoteMock implements HttpCalloutMock
         }
         else if (TrainingServiceRemoteImpl.FAIL_STEP_AND_WAIT_METHOD==method)
         {
-            TrainingPath path=TrainingTestFixtures.GetPath(1);
+            TrainingPath path=TrainingFixtures.GetPath(1);
             result=JSON.serialize(path);
         }
         else if (TrainingServiceRemoteImpl.GET_USER_INFO_METHOD==method)
         {
-            TrainingUserInfo info=TrainingTestFixtures.GetUserInfo(3);
+            TrainingUserInfo info=TrainingFixtures.GetUserInfo(3);
             result=JSON.serialize(info);  
         }
 
