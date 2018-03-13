@@ -1,13 +1,19 @@
 public with sharing class ConfigAccessor {
     private static final String DEVELOPER_NAME='DeveloperName';
-    private static final String SERVICE_MDT='Training_Config__mdt';
-    private static final String SERVICE_MDT_SERVICE_FIELD='Service_Implementation__c';
+    @TestVisible private static final String SERVICE_MDT='Training_Config__mdt';
+    @TestVisible private static final String SERVICE_MDT_SERVICE_FIELD='Service_Implementation__c';
     private static final String SERVICE_MDT_INSTANCE_NAME='Default';
 
-    private static final String ENDPOINT_MDT='Training_Endpoint__mdt';
+    @TestVisible private static final String ENDPOINT_MDT='Training_Endpoint__mdt';
     private static final String ENDPOINT_MDT_HOSTNAME='Hostname__c';
     private static final String ENDPOINT_MDT_PATH='Path__c';
     private static final String ENDPOINT_MDT_REWRITE_IMAGE_LINKS='Rewrite_Image_Links__c';
+
+    @TestVisible private static sObject TestEndpoint;
+
+    @TestVisible private static List<sObject> TestEndpoints;
+
+    @TestVisible private static sObject TestTrainCfg;
 
     public static TrainingEndpoint GetEndpoint(String endpointName)
     {
@@ -18,7 +24,16 @@ public with sharing class ConfigAccessor {
                      ' from ' + ENDPOINT_MDT +
                      ' where ' + DEVELOPER_NAME + '= \'' + endpointName + '\'';
 
-        SObject endpoint=Database.query(query);
+        SObject endpoint;
+        List<SObject> endpoints=Database.query(query);
+        if (endpoints.size()>0)
+        {
+            endpoint=endpoints[0];
+        }
+        if (null!=TestEndpoint) 
+        {
+            endpoint=TestEndpoint;
+        }
 
         TrainingEndpoint result=new TrainingEndpoint();
         result.name=(String) endpoint.get(DEVELOPER_NAME);
@@ -59,12 +74,25 @@ public with sharing class ConfigAccessor {
                      ' from ' + SERVICE_MDT +
                      ' where ' + DEVELOPER_NAME + '=\'' + SERVICE_MDT_INSTANCE_NAME + '\'';
 
-        SObject trainCfg=Database.query(query);
+        SObject trainCfg;
+        List<SObject> trainCfgs=Database.query(query);
+        if (trainCfgs.size()>0)
+        {
+            trainCfg=trainCfgs[0];
+        }
+        if (null!=TestTrainCfg)
+        {
+            trainCfg=TestTrainCfg;
+        }
         String impl=(String) trainCfg.get(SERVICE_MDT_SERVICE_FIELD);
+        TrainingServiceIF trainingService = null; 
         System.debug('Implementation = ' + impl);
-        Type tp=Type.forName(impl);
-        System.debug('Type = ' + tp);
-        TrainingServiceIF trainingService = (TrainingServiceIF) tp.newInstance(); 
+        if (null!=impl)
+        {
+            Type tp=Type.forName(impl);
+            System.debug('Type = ' + tp);
+            trainingService = (TrainingServiceIF) tp.newInstance(); 
+        }
 
         return trainingService;
     }
