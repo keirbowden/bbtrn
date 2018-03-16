@@ -1,2 +1,2 @@
 # bbtrn
-Training system frontt end
+Training system front end
