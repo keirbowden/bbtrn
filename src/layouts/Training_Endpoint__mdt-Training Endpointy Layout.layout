@@ -26,6 +26,10 @@
                 <behavior>Edit</behavior>
                 <field>Rewrite_Image_Links__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Description__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
