@@ -1,5 +1,5 @@
 <aura:component>
     <aura:attribute name="message" type="String" />
     <lightning:icon size="medium" iconName="action:approval" alternativeText="Approved" class="slds-m-right_small" />
-    {!v.message}
+    <lightning:formattedRichText value="{!v.message}" class="slds-text-body_regular" />
 </aura:component>

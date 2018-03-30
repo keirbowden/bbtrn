@@ -12,7 +12,7 @@ public interface TrainingServiceIF {
 
     // Marks a user as having passed a step. If this means that
     // the user has passed the path, returns true
-    Boolean PassStep(String epName, String pathIdStr, String stepIdStr);
+    TrainingResult PassStep(String epName, String pathIdStr, String stepIdStr);
     
     // Marks a user as having failed a step which neans they have to wait to try again
     TrainingPath FailStepAndWait(String epName, String pathIdStr, String stepIdStr);

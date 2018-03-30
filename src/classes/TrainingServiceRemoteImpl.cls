@@ -131,15 +131,15 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
 
     // Marks a user as having passed a step. If this means that
     // the user has passed the path, returns true
-    public Boolean PassStep(String epName, String pathIdStr, String stepIdStr)
+    public TrainingResult PassStep(String epName, String pathIdStr, String stepIdStr)
     {
         endpointName=epName;
-        Boolean result=false;
+        TrainingResult result;
         String json=MakeRequest('POST', 'PassStep', '"' + PATH_ID_PARAM + '":"' + pathIdStr + '","' + STEP_ID_PARAM + '":"' + stepIdStr + '",');
         System.debug('JSON = ' + json);
         if (null!=json)
         {
-            result=(Boolean) System.JSON.deserialize(json, Boolean.class);
+            result=(TrainingResult) System.JSON.deserialize(json, TrainingResult.class);
         }
 
         return result;

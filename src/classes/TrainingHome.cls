@@ -37,7 +37,7 @@ public with sharing class TrainingHome
 
     // returns true if passing the step means the user completed the path
     @AuraEnabled 
-    public static Boolean PassStep(String epName, String pathIdStr, String stepIdStr)
+    public static TrainingResult PassStep(String epName, String pathIdStr, String stepIdStr)
     {
         return trainingService.PassStep(epName, pathIdStr, stepIdStr);
     }

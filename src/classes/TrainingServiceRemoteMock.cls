@@ -45,7 +45,9 @@ global class TrainingServiceRemoteMock implements HttpCalloutMock
         }
         else if (TrainingServiceRemoteImpl.PASS_STEP_METHOD==method)
         {
-            result=JSON.serialize(true);
+            TrainingResult trResult=new TrainingResult();
+            trResult.result=true;
+            result=JSON.serialize(trResult);
         }
         else if (TrainingServiceRemoteImpl.FAIL_STEP_AND_WAIT_METHOD==method)
         {

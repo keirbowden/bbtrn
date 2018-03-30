@@ -148,15 +148,19 @@
         this.showWorking(cmp, 'Updating step');
         cmp.set('v.step', step);
     },
-    passedStep : function(cmp, helper, completedPath) {
+    passedStep : function(cmp, helper, trainingResult) {
         helper.hideWorking(cmp);
         var stepCompletedEvt=$A.get("e.c:StepCompletedEvt");
         stepCompletedEvt.fire();
-        if (completedPath) {
+        if (trainingResult.result) {
             var pathCompletedEvt=$A.get("e.c:PathCompletedEvt");
             pathCompletedEvt.fire();
             cmp.set('v.completedPath', true);
-            helper.showModal(cmp, 'Congratulations', 'You have completed the path');
+            var msg='You have completed the path';
+            if (null!=trainingResult.message) {
+                msg=trainingResult.message;
+            }
+            helper.showModal(cmp, 'Congratulations', msg);
         }
         else {
             helper.showModal(cmp, 'Congratulations', 'You have passed the step');

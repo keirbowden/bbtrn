@@ -58,9 +58,9 @@ private class TrainingServiceRemoteImpl_Test
         Test.startTest();
         TrainingServiceRemoteImpl service=new TrainingServiceRemoteImpl();
         
-        Boolean passed=service.PassStep('Test', 'Mock', 'Step1');
+        TrainingResult result=service.PassStep('Test', 'Mock', 'Step1');
         Test.stopTest();
-        System.assertEquals(true, passed);
+        System.assertEquals(true, result.result);
     }
 
     @IsTest
