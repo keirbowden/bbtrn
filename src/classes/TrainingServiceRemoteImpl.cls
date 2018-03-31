@@ -9,8 +9,11 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
 
     public static final String METHOD_PARAM='method';
     public static final String EMAIL_PARAM='email';
+    public static final String VERSION_PARAM='version';
     public static final String PATH_ID_PARAM='pathIdStr';
     public static final String STEP_ID_PARAM='stepIdStr';
+
+    private static final Decimal VERSION=1.0;
 
     private static final String DEFAULT_ENDPOINT_NAME='Bob_Buzzard';
     private static String endpointName;
@@ -45,7 +48,10 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
         req.setMethod(reqType);
         req.setHeader('Content-type', 'application/json');
         req.setEndPoint(endpoint.hostname + endpoint.path);
-        String reqBody='{' + body + '"' + METHOD_PARAM + '":"' + method + '", "' + EMAIL_PARAM + '":"' + UserInfo.getUserEmail() + '"}';
+        String reqBody='{' + body + '"' + METHOD_PARAM + '":"' + method + '", ' + 
+                         '"' + EMAIL_PARAM + '":"' + UserInfo.getUserEmail() +  '"' + ' , ' +
+                         '"' + VERSION_PARAM + '":"' + VERSION +  '"' +
+                            '}';
         req.setBody(reqBody);
         System.debug('Body = ' + reqBody);
         Http http=new Http();
@@ -61,6 +67,25 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
                 {
                     result=result.replaceAll('/servlet/rtaImage',endpoint.hostname + '/servlet/rtaImage');
                 }
+            }
+            else if (400==statusCode)
+            {
+                JSONParser parser=JSON.createParser(resp.getBody());
+                Map<String, String> params=new Map<String, String>();
+
+                while (null!=parser.nextToken()) 
+                {
+                    if (JSONToken.FIELD_NAME==parser.getCurrentToken())
+                    {
+                        String name=parser.getText();
+                        parser.nextToken();
+                        String value=parser.getText();
+                        System.debug('Name = ' + name + ', Value = ' + value);
+                        params.put(name, value);
+                    }
+                }
+
+                throw new AuraHandledException('Error from external training system ' + params.get('message'));
             }
             else
             {
