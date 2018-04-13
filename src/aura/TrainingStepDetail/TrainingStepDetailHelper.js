@@ -1,4 +1,27 @@
 ({
+    pathIdChanged : function(cmp, ev) {
+        var pathId=cmp.get('v.pathId');
+        if (''!=pathId) {
+            var action=cmp.get('c.GetPath');
+            action.setParams({pathIdStr:pathId,
+                              epName: cmp.get('v.endpoint')});
+            var helper=this;
+            action.setCallback(helper, function(response) {
+                helper.actionResponseHandler(response, cmp, helper, helper.gotPath);
+            });
+            $A.enqueueAction(action);
+            this.showWorking(cmp, 'Retrieving path');
+        }
+    },
+    gotPath : function(cmp, helper, fullPath) {
+        helper.hideWorking(cmp);
+        cmp.set('v.fullPath', fullPath);
+
+        // figure out whether to show prev/next
+        var stepId=cmp.get('v.stepId');
+        cmp.set('v.hasPrevStep', fullPath.steps[0].id!=stepId);
+        cmp.set('v.hasNextStep', fullPath.steps[fullPath.steps.length-1].id!=stepId);
+    },
     stepIdChanged : function(cmp, ev) {
         cmp.set('v.answeredCorrectly', false);
         var stepId=cmp.get('v.stepId');
@@ -12,11 +35,13 @@
             action.setCallback(helper, function(response) {
                 helper.actionResponseHandler(response, cmp, helper, helper.gotStep);
             });
+
             $A.enqueueAction(action);
         }
     },
     gotStep : function(cmp, helper, path) {
         var step=path.steps[0];
+        console.log('Got step');
         console.log('Result = ' + JSON.stringify(path, null, 4));
         var aLabels=['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x'];
         for (var qIdx=0; qIdx<step.questions.length; qIdx++) {
@@ -46,7 +71,15 @@
 
         cmp.set('v.path', path);
         cmp.set('v.step', step);
-        cmp.set('v.completedPath', step.complete);
+        cmp.set('v.completedPath', path.complete);
+
+        // figure out whether to show prev/next
+        var fullPath=cmp.get('v.fullPath');
+        if (null!=fullPath) {
+            var stepId=cmp.get('v.stepId');
+            cmp.set('v.hasPrevStep', fullPath.steps[0].id!=stepId);
+            cmp.set('v.hasNextStep', fullPath.steps[fullPath.steps.length-1].id!=stepId);
+        }
     },
     checkAnswers : function(cmp, ev) {
         var step=cmp.get('v.step');
@@ -174,5 +207,23 @@
         this.backToPath(cmp);
         cmp.set('v.pathId', '');
         cmp.set('v.path', {});
+    },
+    nextStep : function(cmp, ev) {
+        var steps=cmp.get('v.fullPath').steps;
+        var id=cmp.get('v.stepId');
+        for (var idx=0; idx<steps.length; idx++) {
+            if (steps[idx].id==id) {
+                cmp.set('v.stepId', steps[idx+1].id);
+            }
+        }
+    },
+    prevStep : function(cmp, ev) {
+        var steps=cmp.get('v.fullPath').steps;
+        var id=cmp.get('v.stepId');
+        for (var idx=steps.length-1; idx>=0; idx++) {
+            if (steps[idx].id==id) {
+                cmp.set('v.stepId', steps[idx-1].id);
+            }
+        }
     }
 })

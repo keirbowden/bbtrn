@@ -45,7 +45,7 @@
                     </div>
                 </aura:set>
                 <aura:set attribute="footer">
-                    <div class="slds-text-link slds-text-align_left">Topics:
+                    <div class="slds-m-left_xx-small slds-m-right_xx-small slds-text-link slds-text-align_left">Topics:
                         <em>{!v.path.topics}</em>
                     </div>
                 </aura:set>

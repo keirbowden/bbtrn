@@ -8,17 +8,10 @@
     <aura:handler event="c:StepCompletedEvt" action="{!c.stepCompleted}" />
 
     <aura:set attribute="body">
-        <nav class="slds-nav-vertical slds-p-bottom_medium" aria-label="Sub page">
-            <div class="slds-nav-vertical__section">
-                <ul>
-                    <li class="slds-nav-vertical__item">
-                        <a href="javascript:void(0);" onclick="{!c.backToPaths}" class="slds-nav-vertical__action" 
-                            aria-describedby="entity-header" aria-current="page">Back to Paths</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
         <div class="slds-p-around_medium">
+            <div class="slds-p-bottom_medium">
+                <lightning:button iconName="utility:arrowup" iconPosition="left" onclick="{!c.backToPaths}" label="More paths" />
+            </div>
             <aura:iteration items="{!v.path.steps}" var="step">
                 <c:TrainingStep step="{!step}" selectedStepId="{!v.selectedStepId}" />
             </aura:iteration>

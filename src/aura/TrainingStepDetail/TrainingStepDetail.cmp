@@ -2,13 +2,17 @@
     <aura:attribute name="endpoint" type="String" />
     <aura:attribute name="pathId" type="String" />
     <aura:attribute name="stepId" type="String" />
+    <aura:attribute name="fullPath" type="object" />
     <aura:attribute name="path" type="object" />
     <aura:attribute name="step" type="object" />
     <aura:attribute name="answeredCorrectly" type="Boolean" default="false" />
     <aura:attribute name="completedPath" type="Boolean" default="false" />
     <aura:attribute name="waiting" type="Boolean" default="false" />
     <aura:attribute name="nextAttemptTime" type="DateTime" />
+    <aura:attribute name="hasPrevStep" type="Boolean" default="false" />
+    <aura:attribute name="hasNextStep" type="Boolean" default="false" />
 
+    <aura:handler name="change" value="{!v.pathId}" action="{!c.pathIdChanged}" /> 
     <aura:handler name="change" value="{!v.stepId}" action="{!c.stepIdChanged}" />
 
     <aura:registerEvent name="pathCompleteEvent" type="c:PathCompletedEvt" />
@@ -16,26 +20,25 @@
 
     <lightning:overlayLibrary aura:id="overlayLib"/>
 
-    <nav class="slds-nav-vertical slds-p-bottom_medium" aria-label="Sub page">
-        <div class="slds-nav-vertical__section">
-            <ul>
-                <li class="slds-nav-vertical__item">
-                    <a href="javascript:void(0);" onclick="{!c.backToPath}" class="slds-nav-vertical__action" aria-describedby="entity-header"
-                        aria-current="page">Back to Path</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <div class="slds-p-around_small">
 
-    <aura:if isTrue="{!v.step.complete}">
-        <div class="slds-p-around_small">
-            <hr/>
-            <div class="slds-text-heading_medium">You have completed this step.</div>
-            <div class="slds-p-around_medium">
-                <lightning:button onclick="{!c.backToPaths}" label="More paths" />
-            </div>
-        </div>        
-    </aura:if>
+        <aura:if isTrue="{!v.step.complete}">
+            <div class="slds-p-top_small slds-p-bottom_small">
+                <div class="slds-text-heading_medium">You have completed this step.</div>
+            </div>        
+        </aura:if>
+                
+        <lightning:buttonGroup>
+            <lightning:button iconName="utility:undo" iconPosition="left" onclick="{!c.backToPath}" label="Back to path" />
+            <lightning:button iconName="utility:arrowup" iconPosition="left" onclick="{!c.backToPaths}" label="More paths" />
+            <aura:if isTrue="{!v.hasPrevStep}">
+                <lightning:button iconName="utility:back" iconPosition="left" onclick="{!c.prevStep}" label="Previous step" />
+            </aura:if>
+            <aura:if isTrue="{!v.hasNextStep}">
+                <lightning:button iconName="utility:forward" iconPosition="right" onclick="{!c.nextStep}" label="Next step" />
+            </aura:if>
+        </lightning:buttonGroup>
+    </div>
     
     <div class="slds-p-around_small">
         <div class="slds-text-heading_large">
@@ -63,7 +66,9 @@
     <div class="slds-p-around_small">
         <aura:if isTrue="{!v.completedPath}">
             You have completed the {!v.path.name} training path - Congratulations
-            <lightning:button onclick="{!c.backToPaths}" label="More paths" />
+            <div class="slds-p-left_medium">
+                <lightning:button iconName="utility:arrowup" iconPosition="left" onclick="{!c.backToPaths}" label="More paths" />
+            </div>
             <aura:set attribute="else">
                 <aura:if isTrue="{!v.answeredCorrectly}">
                     Congratulations - you've passed the step!
