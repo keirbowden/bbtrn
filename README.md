@@ -11,7 +11,7 @@ See the [installation](https://github.com/keirbowden/bbtrn/blob/master/INSTALLAT
 
 Once installation is complete, access the training system via the Training tab available from the 'waffle' app launcher. Click the image below to see a video of the system in action.
 
-
+[![Youtube Video Image](https://i.imgur.com/SsDksG1.png)](https://youtu.be/gqpq-sKBHUw)
 
 ## More Information
 For more details on technicalities of the solution, see the blog series at : http://bobbuzzard.blogspot.co.uk/p/blog-page.html 
