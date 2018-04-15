@@ -19,4 +19,20 @@ Once this is complete, follow the final instruction to activate the Training fle
 
 Navigate to Setup -> Lightning App Builder:
 
-[Imgur](https://i.imgur.com/yNfQPxr.png)
+![App Builder Link](https://i.imgur.com/g8Fl4Bz.png)
+
+Click the 'Edit' link next to the Training entry:
+
+![List of FlexiPages](https://i.imgur.com/yNfQPxr.png)
+
+Click the activation button at the top right of the screen:
+
+![Activation Button](https://i.imgur.com/OWgP4s2.png)
+
+Select Lightning Experience and add the page to the desired applications:
+
+![Activation Page](https://i.imgur.com/ywngNJy.png)
+
+Click Save once done.
+
+You can then access the training page via the waffle menu, searching for 'Training' and clicking the resulting link.
