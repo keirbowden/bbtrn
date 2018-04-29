@@ -1,3 +1,13 @@
 .THIS .bg-text-med {
     font-size: 1em;
 }
+
+.THIS .bb_card .slds-card__header
+{
+    padding: .75rem 1rem 0;
+}
+
+.THIS .bb_card .slds-card__body
+{
+    padding: .75rem 1rem 0;
+}

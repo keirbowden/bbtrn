@@ -2,7 +2,8 @@
     <aura:attribute name="step" type="object" />
     <aura:attribute name="selectedStepId" type="String" />
     
-    <lightning:card iconName="{!v.step.complete?'action:check':'action:close'}">
+    <div>
+    <lightning:card iconName="{!v.step.complete?'action:check':'action:close'}" class="bb_card">
         <aura:set attribute="title">
             {!v.step.name}
         </aura:set>
@@ -13,4 +14,5 @@
             <lightning:formattedRichText value="{!v.step.description}" />
         </p>
     </lightning:card>
+    </div>
 </aura:component>

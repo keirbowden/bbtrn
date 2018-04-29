@@ -1,2 +1,4 @@
-.THIS {
+.THIS .bb_card .slds-card__header
+{
+    padding: .75rem 1rem 0;
 }
