@@ -53,16 +53,41 @@ public with sharing class ConfigAccessor {
                      ' from ' + ENDPOINT_MDT;
 
         List<SObject> endpoints=Database.query(query);
-  
+        List<String> userEndpoints=new List<String>();
+
+        Set<String> userFields = Schema.SObjectType.User.fields.getMap().keySet();
+        for (String uf : userFields)
+        {
+            System.debug('Field = ' + uf);
+        }
+        if (userFields.contains('endpoints__c')) 
+        {
+            System.debug('Found the fiekd!');
+            List<User> users=Database.query('select Endpoints__c from User where Id=\'' + UserInfo.getUserId() + '\'');
+            System.debug('Users = ' + users);
+            userEndpoints=((String) users[0].get('Endpoints__c')).split(':');
+            System.debug('User endpoints = ' + userEndpoints);
+        }
+
         List<TrainingEndpoint> result=new List<TrainingEndpoint>();
         for (SObject endpoint : endpoints)
         {
-            TrainingEndpoint ep=new TrainingEndpoint();
-            ep.name=(String) endpoint.get(DEVELOPER_NAME);
-            ep.hostname = (String) endpoint.get(ENDPOINT_MDT_HOSTNAME);
-            ep.path = (String) endpoint.get(ENDPOINT_MDT_PATH);
-            ep.rewriteImageLinks = (Boolean) endpoint.get(ENDPOINT_MDT_REWRITE_IMAGE_LINKS);
-            result.add(ep);
+            Boolean useEndpoint=true;
+            String name=(String) endpoint.get(DEVELOPER_NAME);
+            if (!userEndpoints.isEmpty())
+            {
+                useEndpoint=userEndpoints.contains(name);
+            }
+
+            if (useEndpoint)
+            {
+                TrainingEndpoint ep=new TrainingEndpoint();
+                ep.name=(String) endpoint.get(DEVELOPER_NAME);
+                ep.hostname = (String) endpoint.get(ENDPOINT_MDT_HOSTNAME);
+                ep.path = (String) endpoint.get(ENDPOINT_MDT_PATH);
+                ep.rewriteImageLinks = (Boolean) endpoint.get(ENDPOINT_MDT_REWRITE_IMAGE_LINKS);
+                result.add(ep);
+            }
         }
 
         return result;
