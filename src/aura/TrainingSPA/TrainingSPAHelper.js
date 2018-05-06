@@ -45,7 +45,41 @@
     gotPaths : function(cmp, helper, paths) {
         console.log('Result = ' + paths);
         cmp.set('v.paths', paths);
+        helper.applyTopic(cmp, helper, paths);
         helper.hideWorking(cmp);
+    },
+    applyTopic : function(cmp, helper, paths) {
+        console.log('In applyTopic');
+        var allTopics=['Select ...'];
+        var topic=cmp.get('v.topic');
+        if (topic=='Select ...') {
+            topic=null;
+        }
+        var visiblePaths=topic?[]:paths;
+        console.log('Paths = ' + paths);
+        for (var idx=0; idx<paths.length; idx++) {
+            var path=paths[idx];
+            console.log('Processing path = ' + path);
+            console.log('Topic = ' + topic);
+            if ( (topic) && (path.topics.includes(topic)) ) {
+                visiblePaths.push(path);
+            }
+            var topics=path.topics.split(',');
+            console.log('Topics = ' + topics.length);
+            for (var topIdx=0; topIdx<topics.length; topIdx++) {
+                var top=topics[topIdx].trim();
+                console.log('Checking topic = ' + top);
+                if (-1==allTopics.indexOf(top)) {
+                    allTopics.push(top);
+                }
+            }
+        }
+        console.log('All topics = ' + allTopics);
+        cmp.set('v.allTopics', allTopics);
+        cmp.set('v.visiblePaths', visiblePaths);
+    },
+    topicChanged: function(cmp, ev) {
+        this.applyTopic(cmp, this, cmp.get('v.paths'));
     },
     gotInfo : function(cmp, helper, info) {
         console.log('Result = ' + info);

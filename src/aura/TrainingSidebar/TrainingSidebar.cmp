@@ -1,6 +1,8 @@
 <aura:component>
     <aura:attribute name="endpoint" type="String" default="" />
     <aura:attribute name="endpoints" type="object" />
+    <aura:attribute name="topic" type="String" default="" />
+    <aura:attribute name="allTopics" type="object" />
     <aura:attribute name="userinfo" type="object" />
     <aura:attribute name="showBadgesModal" type="Boolean" default="false" />
 
@@ -13,6 +15,11 @@
         <lightning:select name="selEndpoint" label="Choose an endpoint" required="true" value="{!v.endpoint}">
             <aura:iteration items="{!v.endpoints}" var="ep">
                 <option value="{!ep.name}" text="{!ep.name}"></option>
+            </aura:iteration>
+        </lightning:select>
+        <lightning:select name="selTopic" label="Restrict to topic" required="false" value="{!v.topic}">
+            <aura:iteration items="{!v.allTopics}" var="topic">
+                <option value="{!topic}" text="{!topic}"></option>
             </aura:iteration>
         </lightning:select>
     </div>

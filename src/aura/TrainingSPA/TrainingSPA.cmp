@@ -3,13 +3,17 @@
 
     <aura:handler name="change" value="{!v.selectedPathId}" action="{!c.pathIdChanged}" />
     <aura:handler name="change" value="{!v.endpoint}" action="{!c.endpointChanged}" />
+    <aura:handler name="change" value="{!v.topic}" action="{!c.topicChanged}" />
     <aura:handler event="c:PathCompletedEvt" action="{!c.refreshUserInfo}" />
     
+    <aura:attribute name="topic" type="String" description="Tag to restrict paths to" default="" />
+    <aura:attribute name="allTopics" type="String[]" default="" />
     <aura:attribute name="selectedPathId" type="Id" default=""/>
     <aura:attribute name="selectedStepId" type="Id" default=""/>
     <aura:attribute name="userinfo" type="object" />
     <aura:attribute name="endpoint" type="String" default="" />
     <aura:attribute name="paths" type="object" />
+    <aura:attribute name="visiblePaths" type="object" />
     <aura:attribute name="endpoints" type="object" />
 
     <div id="content" class="slds-m-around_medium">
@@ -28,7 +32,7 @@
                 </lightning:layout> -->
 
                     <div class="{!empty(v.selectedPathId)?'':'hidden'}">
-                        <c:TrainingHome endpoint="{!v.endpoint}" selectedPathId="{!v.selectedPathId}" paths="{!v.paths}" />
+                        <c:TrainingHome endpoint="{!v.endpoint}" selectedPathId="{!v.selectedPathId}" paths="{!v.visiblePaths}" />
                     </div>
                     <div class="{!(!empty(v.selectedPathId) &amp;&amp; empty(v.selectedStepId))?'':'hidden'}">
                         <c:TrainingPath endpoint="{!v.endpoint}" pathId="{!v.selectedPathId}" selectedStepId="{!v.selectedStepId}" />
@@ -40,7 +44,8 @@
 
             </lightning:layoutItem>
             <lightning:layoutItem size="3" class="bg-white">
-                <c:TrainingSidebar userinfo="{!v.userinfo}" endpoints="{!v.endpoints}" endpoint="{!v.endpoint}" />
+                <c:TrainingSidebar userinfo="{!v.userinfo}" endpoints="{!v.endpoints}" endpoint="{!v.endpoint}" 
+                                    allTopics="{!v.allTopics}" topic="{!v.topic}" />
             </lightning:layoutItem>
         </lightning:layout>
     </div>

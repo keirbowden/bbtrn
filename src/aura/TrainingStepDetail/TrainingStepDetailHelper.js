@@ -220,7 +220,7 @@
     prevStep : function(cmp, ev) {
         var steps=cmp.get('v.fullPath').steps;
         var id=cmp.get('v.stepId');
-        for (var idx=steps.length-1; idx>=0; idx++) {
+        for (var idx=steps.length-1; idx>=0; idx--) {
             if (steps[idx].id==id) {
                 cmp.set('v.stepId', steps[idx-1].id);
             }
