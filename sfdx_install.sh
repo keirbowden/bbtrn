@@ -5,6 +5,6 @@
 sfdx force:package:install -i 04t0O0000018QDM -u $1 -w 10
 
 # install code package
-sfdx force:package:install -i 04t0O000001IqIw -u $1 -w 10
+sfdx force:package:install -i 04t0O0000018QSo -u $1 -w 10
 
 echo "Activate the 'Training' flexipage to try out the training system."
