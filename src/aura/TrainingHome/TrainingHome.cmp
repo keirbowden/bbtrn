@@ -3,10 +3,29 @@
     <aura:attribute name="endpoint" type="String" default="" />
     <aura:attribute name="selectedPathId" type="Id" />
     <aura:attribute name="paths" type="object" />
+    <aura:attribute name="displayAsTiles" type="Boolean" default="true" />
+    <aura:attribute name="infoVisible" type="Boolean" default="false" />
+    <aura:attribute name="version" type="Decimal" />
 
-    <lightning:layout horizontalAlign="slds-grid_align-space" class="main-grid slds-wrap">
-        <aura:iteration items="{!v.paths}" var="path">
-            <c:TrainingPathTile path="{!path}" selectedPathId="{!v.selectedPathId}" />
-        </aura:iteration>
-    </lightning:layout>
+    <div class="slds-p-around_medium">
+        <div class="slds-p-bottom_medium">
+            <lightning:button iconName="{!v.displayAsTiles?'utility:list':'utility:tile_card_list'}" iconPosition="left" onclick="{!c.toggleTiles}"  />
+            <lightning:button iconName="utility:info" iconPosition="left" onclick="{!c.toggleInfo}"  />
+        </div>
+        <aura:if isTrue="{!v.displayAsTiles}">
+            <lightning:layout horizontalAlign="slds-grid_align-space" class="main-grid slds-wrap">
+                <aura:iteration items="{!v.paths}" var="path">
+                    <c:TrainingPathTile path="{!path}" selectedPathId="{!v.selectedPathId}" />
+                </aura:iteration>
+            </lightning:layout>
+            <aura:set attribute="else">
+                <aura:iteration items="{!v.paths}" var="path">
+                    <c:TrainingPathListItem path="{!path}" selectedPathId="{!v.selectedPathId}" />
+                </aura:iteration>
+            </aura:set>
+        </aura:if>
+    </div>
+    <c:TrainingInfoModal visible="{!v.infoVisible}" version="{!v.version}" closeFunction="{!c.toggleInfo}" />
+    
+
 </aura:component>

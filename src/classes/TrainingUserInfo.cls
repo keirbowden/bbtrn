@@ -21,6 +21,9 @@ public with sharing class TrainingUserInfo
     @AuraEnabled      
     public List<UserBadge> badges {get; set;}  
 
+    @AuraEnabled
+    public Boolean canRunAs {get; set;}
+
     public TrainingUserInfo()
     {
         badges=new List<UserBadge>();

@@ -1,6 +1,8 @@
 <aura:component extends="c:TrainingBase" controller="TrainingHome">
 
     <aura:attribute name="userinfo" type="object" /> 
+    <aura:attribute name="runAsEmail" type="String" />
+    
     <aura:handler event="c:PathCompletedEvt" action="{!c.refreshUserInfo}" />
 
     <div class="slds-page-header">

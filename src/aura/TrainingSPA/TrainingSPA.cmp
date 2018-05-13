@@ -4,6 +4,7 @@
     <aura:handler name="change" value="{!v.selectedPathId}" action="{!c.pathIdChanged}" />
     <aura:handler name="change" value="{!v.endpoint}" action="{!c.endpointChanged}" />
     <aura:handler name="change" value="{!v.topic}" action="{!c.topicChanged}" />
+    <aura:handler name="change" value="{!v.runAsEmail}" action="{!c.runAsChanged}" />
     <aura:handler event="c:PathCompletedEvt" action="{!c.refreshUserInfo}" />
     
     <aura:attribute name="topic" type="String" description="Tag to restrict paths to" default="" />
@@ -15,8 +16,14 @@
     <aura:attribute name="paths" type="object" />
     <aura:attribute name="visiblePaths" type="object" />
     <aura:attribute name="endpoints" type="object" />
+    <aura:attribute name="runAsEmail" type="String" />
+    <aura:attribute name="version" type="Decimal" />
 
     <div id="content" class="slds-m-around_medium">
+        <aura:if isTrue="{! !empty(v.runAsEmail)}">
+            Viewing training as : {!v.runAsEmail}
+        </aura:if>
+
         <lightning:layout horizontalAlign="slds-grid_align-space" class="main-grid">
             <lightning:layoutItem size="9" class="slds-p-right_xx-large bg-white">
 <!--                <lightning:layout horizontalAlign="slds-grid_align-space">
@@ -32,20 +39,23 @@
                 </lightning:layout> -->
 
                     <div class="{!empty(v.selectedPathId)?'':'hidden'}">
-                        <c:TrainingHome endpoint="{!v.endpoint}" selectedPathId="{!v.selectedPathId}" paths="{!v.visiblePaths}" />
+                        <c:TrainingHome endpoint="{!v.endpoint}" selectedPathId="{!v.selectedPathId}" paths="{!v.visiblePaths}" 
+                                        version="{!v.version}" />
                     </div>
                     <div class="{!(!empty(v.selectedPathId) &amp;&amp; empty(v.selectedStepId))?'':'hidden'}">
-                        <c:TrainingPath endpoint="{!v.endpoint}" pathId="{!v.selectedPathId}" selectedStepId="{!v.selectedStepId}" />
+                        <c:TrainingPath endpoint="{!v.endpoint}" pathId="{!v.selectedPathId}" selectedStepId="{!v.selectedStepId}" 
+                                        runAsEmail="{!v.runAsEmail}" />
                     </div>
                     <div class="{!empty(v.selectedStepId)?'hidden':''}">
-                        <c:TrainingStepDetail endpoint="{!v.endpoint}" pathId="{!v.selectedPathId}" stepId="{!v.selectedStepId}" />
+                        <c:TrainingStepDetail endpoint="{!v.endpoint}" pathId="{!v.selectedPathId}" stepId="{!v.selectedStepId}" 
+                                              runAsEmail="{!v.runAsEmail}" />
                     </div>
                 
 
             </lightning:layoutItem>
             <lightning:layoutItem size="3" class="bg-white">
                 <c:TrainingSidebar userinfo="{!v.userinfo}" endpoints="{!v.endpoints}" endpoint="{!v.endpoint}" 
-                                    allTopics="{!v.allTopics}" topic="{!v.topic}" />
+                                    allTopics="{!v.allTopics}" topic="{!v.topic}" runAsEmail="{!v.runAsEmail}" />
             </lightning:layoutItem>
         </lightning:layout>
     </div>

@@ -20,7 +20,7 @@ private class TrainingHome_Test
         Test.startTest();
         TrainingServiceRemoteImpl service=new TrainingServiceRemoteImpl();
         
-        List<TrainingPath> paths=TrainingHome.GetPaths('Test');
+        List<TrainingPath> paths=TrainingHome.GetPaths('Test', null);
 
         Test.stopTest();
         System.assertEquals(2, paths.size());
@@ -34,7 +34,7 @@ private class TrainingHome_Test
         Test.startTest();
         TrainingServiceRemoteImpl service=new TrainingServiceRemoteImpl();
         
-        TrainingPath path=TrainingHome.GetPath('Test', 'Mock');
+        TrainingPath path=TrainingHome.GetPath('Test', 'Mock', null);
         Test.stopTest();
         System.assertEquals(5, path.steps.size());
     }
@@ -46,7 +46,7 @@ private class TrainingHome_Test
         Test.startTest();
         TrainingServiceRemoteImpl service=new TrainingServiceRemoteImpl();
         
-        TrainingPath path=TrainingHome.GetStep('Test', 'Mock', 'Step 1');
+        TrainingPath path=TrainingHome.GetStep('Test', 'Mock', 'Step 1', null);
         Test.stopTest();
         System.assertEquals(1, path.steps.size());
     }
@@ -58,7 +58,7 @@ private class TrainingHome_Test
         Test.startTest();
         TrainingServiceRemoteImpl service=new TrainingServiceRemoteImpl();
         
-        TrainingResult result=TrainingHome.PassStep('Test', 'Mock', 'Step1');
+        TrainingResult result=TrainingHome.PassStep('Test', 'Mock', 'Step1', null);
         Test.stopTest();
         System.assertEquals(true, result.result);
     }
@@ -70,7 +70,7 @@ private class TrainingHome_Test
         Test.startTest();
         TrainingServiceRemoteImpl service=new TrainingServiceRemoteImpl();
         
-        TrainingPath path=TrainingHome.FailStepAndWait('Test', 'Mock', 'Step1');
+        TrainingPath path=TrainingHome.FailStepAndWait('Test', 'Mock', 'Step1', null);
         Test.stopTest();
         System.assertEquals(1, path.steps.size());
     }
@@ -83,7 +83,7 @@ private class TrainingHome_Test
         Test.startTest();
         TrainingServiceRemoteImpl service=new TrainingServiceRemoteImpl();
         
-        TrainingUserInfo info=service.GetUserInfo('Test');
+        TrainingUserInfo info=service.GetUserInfo('Test', null);
         Test.stopTest();
         System.assertEquals(3, info.badges.size());
     }

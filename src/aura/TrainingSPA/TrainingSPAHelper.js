@@ -1,10 +1,28 @@
 ({
     init : function(cmp, ev) {
         this.getAllEndpoints(cmp);
+        this.getVersion(cmp);
+    },
+    runAsChanged : function(cmp, ev) {
+        cmp.set('v.selectedPathId', '');
+        cmp.set('v.selectedStepId', '');
+        this.getAllPaths(cmp);
+    },
+    getVersion : function(cmp) {
+        var action=cmp.get('c.GetVersion');
+        var helper=this;
+        action.setCallback(helper, function(response) {
+            helper.actionResponseHandler(response, cmp, helper, helper.gotVersion);
+        });
+        $A.enqueueAction(action);
+        this.showWorking(cmp);
+    },
+    gotVersion: function(cmp, helper, version) {
+        cmp.set('v.version', version);
     },
     getAllPaths : function(cmp) {
         var action=cmp.get('c.GetPaths');
-        action.setParams({epName: cmp.get('v.endpoint')});
+        action.setParams({epName: cmp.get('v.endpoint'), runAsEmail: cmp.get('v.runAsEmail')});
         var helper=this;
         action.setCallback(helper, function(response) {
             helper.actionResponseHandler(response, cmp, helper, helper.gotPaths);
@@ -15,7 +33,8 @@
     getUserInfo : function(cmp) {
         var action=cmp.get('c.GetUserInfo');
         var helper=this;
-        action.setParams({epName: cmp.get('v.endpoint')});
+        action.setParams({epName: cmp.get('v.endpoint'),
+                          runAsEmail: cmp.get('v.runAsEmail')});
         action.setCallback(helper, function(response) {
             helper.actionResponseHandler(response, cmp, helper, helper.gotInfo);
         });
@@ -44,9 +63,21 @@
     },
     gotPaths : function(cmp, helper, paths) {
         console.log('Result = ' + paths);
+        paths.sort(helper.comparePaths);
         cmp.set('v.paths', paths);
         helper.applyTopic(cmp, helper, paths);
         helper.hideWorking(cmp);
+    },
+    comparePaths : function(one, other) {
+        var result=0;
+        if (one.percentComplete<other.percentComplete) {
+            result=-1;
+        }
+        else if (one.percentComplete>other.percentComplete) {
+            result=1;
+        }
+
+        return result;
     },
     applyTopic : function(cmp, helper, paths) {
         console.log('In applyTopic');

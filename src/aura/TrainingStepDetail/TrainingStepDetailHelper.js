@@ -4,7 +4,8 @@
         if (''!=pathId) {
             var action=cmp.get('c.GetPath');
             action.setParams({pathIdStr:pathId,
-                              epName: cmp.get('v.endpoint')});
+                              epName: cmp.get('v.endpoint'),
+                              runAsEmail: cmp.get('v.runAsEmail')});
             var helper=this;
             action.setCallback(helper, function(response) {
                 helper.actionResponseHandler(response, cmp, helper, helper.gotPath);
@@ -30,7 +31,8 @@
             var action=cmp.get('c.GetStep');
             action.setParams({epName: cmp.get('v.endpoint'),
                               pathIdStr:pathId, 
-                              stepIdStr:stepId});
+                              stepIdStr:stepId,
+                              runAsEmail: cmp.get('v.runAsEmail')});
             var helper=this;
             action.setCallback(helper, function(response) {
                 helper.actionResponseHandler(response, cmp, helper, helper.gotStep);
@@ -122,7 +124,8 @@
                     var action=cmp.get('c.FailStepAndWait');
                     action.setParams({epName: cmp.get('v.endpoint'),
                                       pathIdStr:pathId, 
-                                      stepIdStr:stepId});
+                                      stepIdStr:stepId,
+                                      runAsEmail: cmp.get('v.runAsEmail')});
                     var helper=this;
                     action.setCallback(helper, function(response) {
                         helper.actionResponseHandler(response, cmp, helper, helper.failedStep);
@@ -172,7 +175,8 @@
         var action=cmp.get('c.PassStep');
         action.setParams({epName: cmp.get('v.endpoint'),
                           pathIdStr:pathId, 
-                          stepIdStr:stepId});
+                          stepIdStr:stepId,
+                          runAsEmail: cmp.get('v.runAsEmail')});
         var helper=this;
         action.setCallback(helper, function(response) {
             helper.actionResponseHandler(response, cmp, helper, helper.passedStep);

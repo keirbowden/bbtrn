@@ -18,46 +18,54 @@ public with sharing class TrainingHome
     }
 
     @AuraEnabled
-    public static List<TrainingPath> GetPaths(String epName)
+    public static List<TrainingPath> GetPaths(String epName, String runAsEmail)
     {
-        return trainingService.GetAllPaths(epName);
+        System.debug('Getting paths for email ' + runAsEmail);
+        return trainingService.GetAllPaths(epName, runAsEmail);
     }
 
     @AuraEnabled 
-    public static TrainingPath GetPath(String epName, String pathIdStr)
+    public static TrainingPath GetPath(String epName, String pathIdStr, String runAsEmail)
     {
-        return trainingService.GetPath(epName, pathIdStr);
+        return trainingService.GetPath(epName, pathIdStr, runAsEmail);
     }
 
     @AuraEnabled 
-    public static TrainingPath GetStep(String epName, String pathIdStr, String stepIdStr)
+    public static TrainingPath GetStep(String epName, String pathIdStr, String stepIdStr, String runAsEmail)
     {
-        return trainingService.GetStep(epName, pathIdStr, stepIdStr);
-    }
-
-    // returns true if passing the step means the user completed the path
-    @AuraEnabled 
-    public static TrainingResult PassStep(String epName, String pathIdStr, String stepIdStr)
-    {
-        return trainingService.PassStep(epName, pathIdStr, stepIdStr);
+        return trainingService.GetStep(epName, pathIdStr, stepIdStr, runAsEmail);
     }
 
     // returns true if passing the step means the user completed the path
     @AuraEnabled 
-    public static TrainingPath FailStepAndWait(String epName, String pathIdStr, String stepIdStr)
+    public static TrainingResult PassStep(String epName, String pathIdStr, String stepIdStr, String runAsEmail)
     {
-        return trainingService.FailStepAndWait(epName, pathIdStr, stepIdStr);
+        return trainingService.PassStep(epName, pathIdStr, stepIdStr, runAsEmail);
+    }
+
+    // returns true if passing the step means the user completed the path
+    @AuraEnabled 
+    public static TrainingPath FailStepAndWait(String epName, String pathIdStr, String stepIdStr, String runAsEmail)
+    {
+        return trainingService.FailStepAndWait(epName, pathIdStr, stepIdStr, runAsEmail);
     }
 
     @AuraEnabled
-    public static TrainingUserInfo GetUserInfo(String epName)
+    public static TrainingUserInfo GetUserInfo(String epName, String runAsEmail)
     {
-        return trainingService.GetUserInfo(epName);
+        return trainingService.GetUserInfo(epName, runAsEmail);
     }
 
     @AuraEnabled
     public static List<TrainingEndpoint> GetAllEndpoints()
     {
         return trainingService.GetAllEndpoints();
+    }
+
+    @AuraEnabled
+    // TODO in V2 - move this to the service interface
+    public static Decimal GetVersion()
+    {
+        return TrainingServiceRemoteImpl.VERSION;
     }
 }

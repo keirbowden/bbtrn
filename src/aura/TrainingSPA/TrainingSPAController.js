@@ -8,6 +8,9 @@
     endpointChanged : function(component, event, helper) {
         helper.endpointChanged(component, event);
     },
+    runAsChanged : function(component, event, helper) {
+        helper.runAsChanged(component, event);
+    },
     topicChanged : function(component, event, helper) {
         helper.topicChanged(component, event);
     },

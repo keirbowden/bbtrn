@@ -13,7 +13,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     public static final String PATH_ID_PARAM='pathIdStr';
     public static final String STEP_ID_PARAM='stepIdStr';
 
-    private static final Decimal VERSION=1.3;
+    public static final Decimal VERSION=1.4;
 
     private static final String DEFAULT_ENDPOINT_NAME='Bob_Buzzard';
     private static String endpointName;
@@ -42,6 +42,15 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
 
     public String MakeRequest(String reqType, String method, String body)
     {
+        return this.MakeRequest(reqType, method, body, null);
+    }
+
+    public String MakeRequest(String reqType, String method, String body, String email)
+    {
+        if (String.IsBlank(email)) {
+            email=UserInfo.getUserEmail();
+        }
+
         String result=null;
 
         HttpRequest req=new HttpRequest();
@@ -49,7 +58,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
         req.setHeader('Content-type', 'application/json');
         req.setEndPoint(endpoint.hostname + endpoint.path);
         String reqBody='{' + body + '"' + METHOD_PARAM + '":"' + method + '", ' + 
-                         '"' + EMAIL_PARAM + '":"' + UserInfo.getUserEmail() +  '"' + ' , ' +
+                         '"' + EMAIL_PARAM + '":"' + email +  '"' + ' , ' +
                          '"' + VERSION_PARAM + '":"' + VERSION +  '"' +
                             '}';
         req.setBody(reqBody);
@@ -108,11 +117,11 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     }
     
     // Gets all the paths even if the user has completed them
-    public List<TrainingPath> GetAllPaths(String epName)
+    public List<TrainingPath> GetAllPaths(String epName, String runAsEmail)
     {
         endpointName=epName;
         List<TrainingPath> paths;
-        String json=MakeRequest('POST', GET_ALL_PATHS_METHOD, '');
+        String json=MakeRequest('POST', GET_ALL_PATHS_METHOD, '', runAsEmail);
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -124,11 +133,11 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
 
     // Gets the details of a single path, including a high level
     // view of the steps
-    public TrainingPath GetPath(String epName, String pathIdStr)
+    public TrainingPath GetPath(String epName, String pathIdStr, String runAsEmail)
     {
         endpointName=epName;
         TrainingPath path=null;
-        String json=MakeRequest('POST', GET_PATH_METHOD, '"' + PATH_ID_PARAM + '":"' + pathIdStr + '",');
+        String json=MakeRequest('POST', GET_PATH_METHOD, '"' + PATH_ID_PARAM + '":"' + pathIdStr + '",', runAsEmail);
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -140,11 +149,11 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
 
     // Gets the details of a step, including the questions
     // and answers
-    public TrainingPath GetStep(String epName, String pathIdStr, String stepIdStr)
+    public TrainingPath GetStep(String epName, String pathIdStr, String stepIdStr, String runAsEmail)
     {
         endpointName=epName;
         TrainingPath path=null;
-        String json=MakeRequest('POST', 'GetStep', '"' + PATH_ID_PARAM + '":"' + pathIdStr + '","' + STEP_ID_PARAM + '":"' + stepIdStr + '",');
+        String json=MakeRequest('POST', 'GetStep', '"' + PATH_ID_PARAM + '":"' + pathIdStr + '","' + STEP_ID_PARAM + '":"' + stepIdStr + '",', runAsEmail);
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -156,11 +165,11 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
 
     // Marks a user as having passed a step. If this means that
     // the user has passed the path, returns true
-    public TrainingResult PassStep(String epName, String pathIdStr, String stepIdStr)
+    public TrainingResult PassStep(String epName, String pathIdStr, String stepIdStr, String runAsEmail)
     {
         endpointName=epName;
         TrainingResult result;
-        String json=MakeRequest('POST', 'PassStep', '"' + PATH_ID_PARAM + '":"' + pathIdStr + '","' + STEP_ID_PARAM + '":"' + stepIdStr + '",');
+        String json=MakeRequest('POST', 'PassStep', '"' + PATH_ID_PARAM + '":"' + pathIdStr + '","' + STEP_ID_PARAM + '":"' + stepIdStr + '",', runAsEmail);
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -170,11 +179,11 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
         return result;
     }
     
-    public TrainingPath FailStepAndWait(String epName, String pathIdStr, String stepIdStr)
+    public TrainingPath FailStepAndWait(String epName, String pathIdStr, String stepIdStr, String runAsEmail)
     {
         endpointName=epName;
         TrainingPath result;
-        String json=MakeRequest('POST', 'FailStepAndWait', '"' + PATH_ID_PARAM + '":"' + pathIdStr + '","' + STEP_ID_PARAM + '":"' + stepIdStr + '",');
+        String json=MakeRequest('POST', 'FailStepAndWait', '"' + PATH_ID_PARAM + '":"' + pathIdStr + '","' + STEP_ID_PARAM + '":"' + stepIdStr + '",', runAsEmail);
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -185,11 +194,11 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     }
     
     // Gets the user infomation, such as badges, points etc
-    public TrainingUserInfo GetUserInfo(String epName)
+    public TrainingUserInfo GetUserInfo(String epName, String runAsEmail)
     {
         endpointName=epName;
         TrainingUserInfo info;
-        String json=MakeRequest('POST', GET_USER_INFO_METHOD, '');
+        String json=MakeRequest('POST', GET_USER_INFO_METHOD, '', runAsEmail);
         System.debug('JSON = ' + json);
         if (null!=json)
         {
@@ -200,6 +209,25 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
         info.firstname=UserInfo.getFirstName();
         info.lastname=UserInfo.getLastName();
         info.initials=info.firstname.substring(0, 1) + info.lastname.substring(0, 1);
+
+    	// get the custom permission and associated permission set id
+		CustomPermission custPerm=[select Id,
+										  (select Id, ParentId, Parent.Name, Parent.Profile.Name from SetupEntityAccessItems)
+										  from CustomPermission
+                                          where DeveloperName='Training_Run_As'];
+	
+        List<Id> permSetIds=new List<Id>();
+		for (SetupEntityAccess sea : custPerm.SetupEntityAccessItems)
+		{
+			permSetIds.add(sea.parentId);
+		}
+
+		List<PermissionSetAssignment> psas=[select Id, AssigneeId
+											from PermissionSetAssignment
+											where PermissionSetId IN :permSetIds
+											and AssigneeId=:UserInfo.getUserId()];  
+
+        info.canRunAs=!psas.IsEmpty();
 
         return info;
     }

@@ -6,6 +6,7 @@
     <aura:attribute name="selectedStepId" type="Id" />
     <aura:handler name="change" value="{!v.pathId}" action="{!c.pathIdChanged}" />
     <aura:handler event="c:StepCompletedEvt" action="{!c.stepCompleted}" />
+    <aura:attribute name="runAsEmail" type="String" />
 
     <aura:set attribute="body">
         <div class="slds-p-around_medium">

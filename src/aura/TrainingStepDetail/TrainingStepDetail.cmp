@@ -11,6 +11,7 @@
     <aura:attribute name="nextAttemptTime" type="DateTime" />
     <aura:attribute name="hasPrevStep" type="Boolean" default="false" />
     <aura:attribute name="hasNextStep" type="Boolean" default="false" />
+    <aura:attribute name="runAsEmail" type="String" />
 
     <aura:handler name="change" value="{!v.pathId}" action="{!c.pathIdChanged}" /> 
     <aura:handler name="change" value="{!v.stepId}" action="{!c.stepIdChanged}" />

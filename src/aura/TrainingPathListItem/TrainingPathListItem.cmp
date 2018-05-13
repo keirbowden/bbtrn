@@ -1,0 +1,19 @@
+<aura:component>
+    <aura:attribute name="path" type="object" />
+    <aura:attribute name="selectedPathId" type="String" />
+
+    <div>
+        <lightning:card class="bb_card">
+            <aura:set attribute="title">
+                {!v.path.name} - <em>{!v.path.percentComplete} % complete</em>
+            </aura:set>
+            <aura:set attribute="actions">
+                <lightning:button label="Go" onclick="{!c.clicked}" />
+            </aura:set>
+            <p class="slds-p-horizontal_small">
+                <lightning:formattedRichText value="{!v.path.summary}"/> Topics : <em> {!v.path.topics}</em>
+            </p>
+        </lightning:card>
+    </div>
+
+</aura:component>	

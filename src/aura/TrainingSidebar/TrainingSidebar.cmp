@@ -5,10 +5,12 @@
     <aura:attribute name="allTopics" type="object" />
     <aura:attribute name="userinfo" type="object" />
     <aura:attribute name="showBadgesModal" type="Boolean" default="false" />
+    <aura:attribute name="runAsEmail" type="String" />
+    <aura:attribute name="runAsInput" type="String" />
 
     <div class="slds-m-around_medium">
         <div class="slds-p-bottom_small">Endpoint :
-            <strong>{!v.endpoint.name}</strong>
+            <strong>{!v.endpoint}</strong>
         </div>
         <div class="slds-p-bottom_small">{!v.userinfo.badgeCount} badge(s)</div>
         <div><lightning:button label="Show badges" onclick="{!c.toggleBadges}" /></div>
@@ -22,7 +24,11 @@
                 <option value="{!topic}" text="{!topic}"></option>
             </aura:iteration>
         </lightning:select>
-    </div>
+        <aura:if isTrue="{!v.userinfo.canRunAs}">
+            <lightning:input value="{!v.runAsInput}" label="Run As (Email)" name="runAs" />
+            <div class="slds-p-top_x-small"><lightning:button label="Run As" onclick="{!c.runAs}" /></div>
+        </aura:if>
+        </div>
     <aura:if isTrue="{!v.showBadgesModal}">
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
             class="slds-modal slds-fade-in-open">

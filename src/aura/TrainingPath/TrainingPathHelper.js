@@ -4,7 +4,8 @@
         if (''!=pathId) {
             var action=cmp.get('c.GetPath');
             action.setParams({pathIdStr:pathId,
-                              epName: cmp.get('v.endpoint')});
+                              epName: cmp.get('v.endpoint'),
+                              runAsEmail: cmp.get('v.runAsEmail')});
             var helper=this;
             action.setCallback(helper, function(response) {
                 helper.actionResponseHandler(response, cmp, helper, helper.gotPath);

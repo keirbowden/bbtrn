@@ -1,0 +1,43 @@
+<aura:component>
+    <aura:attribute name="visible" type="Boolean" default="false" />
+    <aura:attribute name="closeFunction" type="Aura.Action" />
+    <aura:attribute name="version" type="Decimal" />
+
+    <aura:if isTrue="{!v.visible}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" 
+                            onclick="{!v.closeFunction}">
+                        <lightning:icon class="slds-button__icon slds-button__icon_large" iconName="utility:close" size="medium" />
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Bob Buzzard Training System V{!v.version}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-text-heading_small">V1.4</div>
+                    <ul>
+                        <li>Added this info modal</li>
+                        <li>Toggle paths view between card and list</li>
+                        <li>Admin with the Training_Run_As permission set can run as a specified email address</li>
+                    </ul>
+                    <div class="slds-p-top_small slds-text-heading_small">V1.3</div>
+                    <ul>
+                        <li>Filter paths by topic</li>
+                    </ul>
+                    <div class="slds-p-top_small slds-text-heading_small">V1.2</div>
+                    <ul>
+                        <li>Improved formatting when the training SPA is embedded in a standard page (tested on the Chatter People page)</li>
+                        <li>Endpoints may be restricted based on the optional Endpoints__c custom field on the User sobject. This is not part of the codebase, but will be respected if present</li>
+                    </ul>
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!v.closeFunction}">Close</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+
+</aura:component>	
