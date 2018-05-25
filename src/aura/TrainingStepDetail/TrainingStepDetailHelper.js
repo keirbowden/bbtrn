@@ -136,6 +136,9 @@
             }
             cmp.set('v.step', step);
         }
+        else {
+			this.showToast('error', 'Please select an answer for all questions');
+        }
     },
     failedStep : function(cmp, helper, failedPath) {
         helper.hideWorking(cmp);
