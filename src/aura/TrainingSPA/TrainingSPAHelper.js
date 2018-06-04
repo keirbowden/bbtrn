@@ -92,16 +92,18 @@
             var path=paths[idx];
             console.log('Processing path = ' + path);
             console.log('Topic = ' + topic);
-            if ( (topic) && (path.topics.includes(topic)) ) {
-                visiblePaths.push(path);
-            }
-            var topics=path.topics.split(',');
-            console.log('Topics = ' + topics.length);
-            for (var topIdx=0; topIdx<topics.length; topIdx++) {
-                var top=topics[topIdx].trim();
-                console.log('Checking topic = ' + top);
-                if (-1==allTopics.indexOf(top)) {
-                    allTopics.push(top);
+            if (path.topics) {
+                if ( (topic) && (path.topics.includes(topic)) ) {
+                    visiblePaths.push(path);
+                }
+                var topics=path.topics.split(',');
+                console.log('Topics = ' + topics.length);
+                for (var topIdx=0; topIdx<topics.length; topIdx++) {
+                    var top=topics[topIdx].trim();
+                    console.log('Checking topic = ' + top);
+                    if (-1==allTopics.indexOf(top)) {
+                        allTopics.push(top);
+                    }
                 }
             }
         }
