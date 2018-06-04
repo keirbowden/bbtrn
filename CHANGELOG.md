@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.5](https://github.com/keirbowden/bbtrn/releases/tag/V1.5) (???)
+[Full Changelog](https://github.com/keirbowden/bbtrn/compare/V1.4...V1.5)
+
+**Implemented enhancements:**
+
+- 
+
+**Fixed bugs:**
+
+- If a user misses answering a question, now generates an error message
+- Handle scenario where a path doesn't have any topics
+
 ## [v1.4](https://github.com/keirbowden/bbtrn/releases/tag/V1.4) (2017-05-13)
 [Full Changelog](https://github.com/keirbowden/bbtrn/compare/V1.3...V1.4)
 
