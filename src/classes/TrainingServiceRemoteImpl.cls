@@ -13,7 +13,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     public static final String PATH_ID_PARAM='pathIdStr';
     public static final String STEP_ID_PARAM='stepIdStr';
 
-    public static final Decimal VERSION=1.4;
+    public static final Decimal VERSION=1.5;
 
     private static final String DEFAULT_ENDPOINT_NAME='Bob_Buzzard';
     private static String endpointName;

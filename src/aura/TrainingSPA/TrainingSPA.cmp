@@ -18,6 +18,7 @@
     <aura:attribute name="endpoints" type="object" />
     <aura:attribute name="runAsEmail" type="String" />
     <aura:attribute name="version" type="Decimal" />
+    <aura:attribute name="initialised" type="Boolean" default="false" />
 
     <div id="content" class="slds-m-around_medium">
         <aura:if isTrue="{! !empty(v.runAsEmail)}">

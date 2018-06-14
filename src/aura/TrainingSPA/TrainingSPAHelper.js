@@ -57,8 +57,22 @@
         }
     },
     endpointChanged : function(cmp, ev) {
-        cmp.set('v.selectedPathId', '');
-        cmp.set('v.selectedStepId', '');
+        var pathId='';
+        var stepId='';
+        if (!cmp.get('v.initialised')) {
+            var pathIdFromURL=this.getURLParameter('pathId');
+            if (pathIdFromURL) {
+                pathId=pathIdFromURL;
+            }
+            var stepIdFromURL=this.getURLParameter('stepId');
+            if (stepIdFromURL) {
+                stepId=stepIdFromURL;
+            }
+            cmp.set('v.initialised', true);
+        }
+        cmp.set('v.selectedPathId', pathId);
+        cmp.set('v.selectedStepId', stepId);
+
         this.getDetailsFromEndpoint(cmp);
     },
     gotPaths : function(cmp, helper, paths) {
@@ -122,7 +136,15 @@
     gotEndpoints : function(cmp, helper, endpoints) {
         console.log('Result = ' + JSON.stringify(endpoints));
         cmp.set('v.endpoints', endpoints);
-        cmp.set('v.endpoint', endpoints[0].name);
+
+        // now that we have the endpoints, check to see if there is a bookmark in the URL
+        var endpoint=helper.getURLParameter('endpoint');
+        if (endpoint) {
+            cmp.set('v.endpoint', endpoint);
+        }
+        else {
+            cmp.set('v.endpoint', endpoints[0].name);
+        }
         helper.hideWorking(cmp);
     },
     getDetailsFromEndpoint : function(cmp) {

@@ -1,18 +1,19 @@
 # Changelog
 
-## [v1.5](https://github.com/keirbowden/bbtrn/releases/tag/V1.5) (???)
+## [v1.5](https://github.com/keirbowden/bbtrn/releases/tag/V1.5) (2018-06-14)
 [Full Changelog](https://github.com/keirbowden/bbtrn/compare/V1.4...V1.5)
 
 **Implemented enhancements:**
 
-- 
+- TrainingSPA will look for endpoint, pathId and stepId parameters in the URL
+  when initialising.
 
 **Fixed bugs:**
 
 - If a user misses answering a question, now generates an error message
 - Handle scenario where a path doesn't have any topics
 
-## [v1.4](https://github.com/keirbowden/bbtrn/releases/tag/V1.4) (2017-05-13)
+## [v1.4](https://github.com/keirbowden/bbtrn/releases/tag/V1.4) (2018-05-13)
 [Full Changelog](https://github.com/keirbowden/bbtrn/compare/V1.3...V1.4)
 
 **Implemented enhancements:**
@@ -25,7 +26,7 @@
 
 - 
 
-## [v1.3](https://github.com/keirbowden/bbtrn/releases/tag/V1.3) (2017-05-06)
+## [v1.3](https://github.com/keirbowden/bbtrn/releases/tag/V1.3) (2018-05-06)
 [Full Changelog](https://github.com/keirbowden/bbtrn/compare/V1.2...V1.3)
 
 **Implemented enhancements:**
@@ -36,7 +37,7 @@
 
 - 
 
-## [v1.2](https://github.com/keirbowden/bbtrn/releases/tag/V1.2) (2017-04-30)
+## [v1.2](https://github.com/keirbowden/bbtrn/releases/tag/V1.2) (2018-04-30)
 [Full Changelog](https://github.com/keirbowden/bbtrn/compare/V1.1...V1.2)
 
 **Implemented enhancements:**
@@ -48,7 +49,7 @@
 
 - 
 
-## [v1.1](https://github.com/keirbowden/bbtrn/releases/tag/V1.1) (2017-04-30)
+## [v1.1](https://github.com/keirbowden/bbtrn/releases/tag/V1.1) (2018-04-30)
 [Full Changelog](https://github.com/keirbowden/bbtrn/compare/V1.0...V1.1)
 
 **Implemented enhancements:**
@@ -60,7 +61,7 @@
 
 - A number of minor bug fixes.
 
-## [v1.0](https://github.com/keirbowden/bbtrn/releases/tag/V1.0) (2017-03-31)
+## [v1.0](https://github.com/keirbowden/bbtrn/releases/tag/V1.0) (2018-03-31)
 
 **Implemented enhancements:**
 

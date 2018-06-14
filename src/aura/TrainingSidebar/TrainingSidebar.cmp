@@ -16,7 +16,7 @@
         <div><lightning:button label="Show badges" onclick="{!c.toggleBadges}" /></div>
         <lightning:select name="selEndpoint" label="Choose an endpoint" required="true" value="{!v.endpoint}">
             <aura:iteration items="{!v.endpoints}" var="ep">
-                <option value="{!ep.name}" text="{!ep.name}"></option>
+                <option value="{!ep.name}" text="{!ep.name}" selected="{!ep.name==v.endpoint}"></option>
             </aura:iteration>
         </lightning:select>
         <lightning:select name="selTopic" label="Restrict to topic" required="false" value="{!v.topic}">
