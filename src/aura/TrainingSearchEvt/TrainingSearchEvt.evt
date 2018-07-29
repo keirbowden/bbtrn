@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT" description="Event fired when the user takes a search action">
+    <aura:attribute name="action" type="String" />
+    <aura:attribute name="terms" type="String" />
+</aura:event>

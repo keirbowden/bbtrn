@@ -62,7 +62,7 @@ public with sharing class ConfigAccessor {
         }
         if (userFields.contains('endpoints__c')) 
         {
-            System.debug('Found the fiekd!');
+            System.debug('Found the field!');
             List<User> users=Database.query('select Endpoints__c from User where Id=\'' + UserInfo.getUserId() + '\'');
             System.debug('Users = ' + users);
             userEndpoints=((String) users[0].get('Endpoints__c')).split(':');

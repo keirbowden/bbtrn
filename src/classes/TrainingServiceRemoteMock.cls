@@ -59,6 +59,14 @@ global class TrainingServiceRemoteMock implements HttpCalloutMock
             TrainingUserInfo info=TrainingFixtures.GetUserInfo(3);
             result=JSON.serialize(info);  
         }
+        else if ( (TrainingServiceRemoteImpl.SEARCH_PATHS_FREE_METHOD==method) ||
+                  (TrainingServiceRemoteImpl.SEARCH_PATHS_TOPICS_METHOD==method) ) 
+        {
+            List<TrainingPath> paths=new List<TrainingPath>();
+            paths.add(TrainingFixtures.GetPath(3));
+            paths.add(TrainingFixtures.GetPath(2));
+            result=JSON.serialize(paths);
+        }
 
         HttpResponse res = new HttpResponse();
         res.setHeader('Content-Type', 'application/json');

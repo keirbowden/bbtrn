@@ -82,17 +82,6 @@
         helper.applyTopic(cmp, helper, paths);
         helper.hideWorking(cmp);
     },
-    comparePaths : function(one, other) {
-        var result=0;
-        if (one.percentComplete<other.percentComplete) {
-            result=-1;
-        }
-        else if (one.percentComplete>other.percentComplete) {
-            result=1;
-        }
-
-        return result;
-    },
     applyTopic : function(cmp, helper, paths) {
         console.log('In applyTopic');
         var allTopics=['Select ...'];
@@ -153,5 +142,35 @@
     },
     refreshUserInfo : function(cmp, ev) {
         this.getUserInfo(cmp);
+    },
+    handleSearchEvent : function(cmp, ev) {
+        var searchType=ev.getParam('action');
+
+        var action;
+        
+        if (searchType==='CLEAR') {
+            this.getAllPaths(cmp);
+        }
+        else {
+            if (searchType==='FREE') {
+                action=cmp.get('c.SearchPathsFree');
+            }
+            else if (searchType=='TOPIC') {
+                action=cmp.get('c.SearchPathsTopics');
+            }
+
+            var terms=ev.getParam('terms');
+        
+            action.setParams({searchTerms: terms, runAsEmail: cmp.get('v.runAsEmail')});
+            var helper=this;
+            action.setCallback(helper, function(response) {
+                helper.actionResponseHandler(response, cmp, helper, helper.searched);
+            });
+            $A.enqueueAction(action);
+            this.showWorking(cmp);      
+        }
+    },
+    searched : function(cmp, helper, paths) {
+        helper.gotPaths(cmp, helper, paths);
     }
 })

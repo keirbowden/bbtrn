@@ -63,6 +63,18 @@ public with sharing class TrainingHome
     }
 
     @AuraEnabled
+    public static List<TrainingPath> SearchPathsFree(String searchTerms, String runAsEmail)
+    {
+        return trainingService.SearchPathsFree(searchTerms, runAsEmail);
+    }
+
+    @AuraEnabled
+    public static List<TrainingPath> SearchPathsTopics(String searchTerms, String runAsEmail)
+    {
+        return trainingService.SearchPathsTopics(searchTerms, runAsEmail);
+    }
+
+    @AuraEnabled
     // TODO in V2 - move this to the service interface
     public static Decimal GetVersion()
     {

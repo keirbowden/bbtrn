@@ -7,6 +7,8 @@
     <aura:attribute name="showBadgesModal" type="Boolean" default="false" />
     <aura:attribute name="runAsEmail" type="String" />
     <aura:attribute name="runAsInput" type="String" />
+    <aura:attribute name="searchInput" type="String" />
+    <aura:registerEvent name="searchEvent" type="c:TrainingSearchEvt"/>
 
     <div class="slds-m-around_medium">
         <div class="slds-p-bottom_small">Endpoint :
@@ -19,6 +21,12 @@
                 <option value="{!ep.name}" text="{!ep.name}" selected="{!ep.name==v.endpoint}"></option>
             </aura:iteration>
         </lightning:select>
+        <lightning:input value="{!v.searchInput}" label="Search Paths" name="search" />
+        <div class="slds-p-top_x-small">
+            <lightning:button label="Search Paths" onclick="{!c.freeSearch}" />
+            <lightning:button label="Search Topics" onclick="{!c.topicSearch}" />       
+            <lightning:button label="Clear" onclick="{!c.clearSearch}" />       
+        </div>
         <lightning:select name="selTopic" label="Restrict to topic" required="false" value="{!v.topic}">
             <aura:iteration items="{!v.allTopics}" var="topic">
                 <option value="{!topic}" text="{!topic}"></option>
@@ -43,7 +51,7 @@
                 </header>
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
                     <aura:iteration items="{!v.userinfo.badges}" var="badge">
-                        {!badge.name}:{!badge.description}:{!badge.whenEarned}<br/>
+                        {!badge.name}:{!badge.description}:{!badge.whenEarned}:{!badge.earnedCount}&nbsp;times<br/>
                     </aura:iteration>
                 </div>
                 <footer class="slds-modal__footer">

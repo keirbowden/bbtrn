@@ -6,14 +6,17 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     public static final String PASS_STEP_METHOD='PassStep';
     public static final String FAIL_STEP_AND_WAIT_METHOD='FailStepAndWait';
     public static final String GET_USER_INFO_METHOD='GetUserInfo';
+    public static final String SEARCH_PATHS_FREE_METHOD='SearchPathsFree';
+    public static final String SEARCH_PATHS_TOPICS_METHOD='SearchPathsTopics';
 
     public static final String METHOD_PARAM='method';
     public static final String EMAIL_PARAM='email';
     public static final String VERSION_PARAM='version';
     public static final String PATH_ID_PARAM='pathIdStr';
     public static final String STEP_ID_PARAM='stepIdStr';
+    public static final String SEARCH_TERMS_PARAM='searchTerms';
 
-    public static final Decimal VERSION=1.5;
+    public static final Decimal VERSION=2.0;
 
     private static final String DEFAULT_ENDPOINT_NAME='Bob_Buzzard';
     private static String endpointName;
@@ -77,7 +80,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
                     result=result.replaceAll('/servlet/rtaImage',endpoint.hostname + '/servlet/rtaImage');
                 }
             }
-            else if (400==statusCode)
+            else if ( (400==statusCode) || (500==statusCode) )
             {
                 JSONParser parser=JSON.createParser(resp.getBody());
                 Map<String, String> params=new Map<String, String>();
@@ -230,5 +233,51 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
         info.canRunAs=!psas.IsEmpty();
 
         return info;
+    }
+
+    // Free text search for training paths matching the space seperated terms
+    public List<TrainingPath> SearchPathsFree(String searchTerms, String runAsEmail)
+    {
+        List<TrainingPath> results=new List<TrainingPath>();
+        List<TrainingEndpoint> endpoints=this.GetAllEndpoints();
+        for (TrainingEndpoint endpoint : endpoints) 
+        {
+            TrainingServiceRemoteImpl.endpoint=endpoint;
+            String json=MakeRequest('POST', SEARCH_PATHS_FREE_METHOD, '"' + SEARCH_TERMS_PARAM + '":"' + searchTerms + '",', runAsEmail);
+            System.debug('JSON = ' + json);
+            if (null!=json)
+            {
+                List<TrainingPath> epPaths=(List<TrainingPath>) System.JSON.deserialize(json, List<TrainingPath>.class);
+                if ( (null!=epPaths) && (!epPaths.IsEmpty()) )
+                {
+                    results.addAll(epPaths);
+                }
+            }
+        }
+
+        return results;
+    }
+
+    // Topics search for training paths matching the space seperated topics
+    public List<TrainingPath> SearchPathsTopics(String searchTerms, String runAsEmail) 
+    {
+        List<TrainingPath> results=new List<TrainingPath>();
+        List<TrainingEndpoint> endpoints=this.GetAllEndpoints();
+        for (TrainingEndpoint endpoint : endpoints) 
+        {
+            TrainingServiceRemoteImpl.endpoint=endpoint;
+            String json=MakeRequest('POST', SEARCH_PATHS_TOPICS_METHOD, '"' + SEARCH_TERMS_PARAM + '":"' + searchTerms + '",', runAsEmail);
+            System.debug('JSON = ' + json);
+            if (null!=json)
+            {
+                List<TrainingPath> epPaths=(List<TrainingPath>) System.JSON.deserialize(json, List<TrainingPath>.class);
+                if ( (null!=epPaths) && (!epPaths.IsEmpty()) )
+                {
+                    results.addAll(epPaths);
+                }
+            }
+        }
+
+        return results;
     }
 }

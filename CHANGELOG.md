@@ -1,5 +1,19 @@
 # Changelog
 
+## [v2.0](https://github.com/keirbowden/bbtrn/releases/tag/V2.0) (2018-07-29)
+[Full Changelog](https://github.com/keirbowden/bbtrn/compare/V1.5...V2.0)
+
+**Implemented enhancements:**
+
+- Free text and topic search across all endpoints
+- Earn badges multiple times
+- New training 'available' components
+
+**Fixed bugs:**
+
+- Fixed a number of typos
+
+
 ## [v1.5](https://github.com/keirbowden/bbtrn/releases/tag/V1.5) (2018-06-14)
 [Full Changelog](https://github.com/keirbowden/bbtrn/compare/V1.4...V1.5)
 

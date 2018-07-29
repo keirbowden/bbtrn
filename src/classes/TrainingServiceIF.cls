@@ -22,4 +22,10 @@ public interface TrainingServiceIF {
 
     // retrieves all defined endpoints. 
     List<TrainingEndpoint> GetAllEndpoints();
+
+    // Free text search for training pathers matching the space seperated terms
+    List<TrainingPath> SearchPathsFree(String searchTerms, String runAsEmail);
+
+    // Topics search for training pathers matching the space seperated terms
+    List<TrainingPath> SearchPathsTopics(String searchTerms, String runAsEmail);
 }

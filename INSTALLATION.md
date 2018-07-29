@@ -2,7 +2,7 @@
 
 The easiest way to install is via the Salesforce CLI installation script. This will install an unmanaged package containing the configuration metadata, custom metadata records for the app and example remote endpoint configuration and remote site for the example endpoint, and a further unmanaged package containing the application itself.
 
-On MacOS, after cloning the repository, executed the sfdx_install.sh bash script.:
+On MacOS, after cloning the repository, execute the sfdx_install.sh bash script.:
 
 ```$ ./sfdx_install.sh MINDEPLOY
 Waiting for the package install request to complete. Status = IN_PROGRESS

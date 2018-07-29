@@ -81,4 +81,15 @@
         console.log('Param ' + param + ' from URL = ' + result);
         return result;
     },
+    comparePaths : function(one, other) {
+        var result=0;
+        if (one.percentComplete<other.percentComplete) {
+            result=-1;
+        }
+        else if (one.percentComplete>other.percentComplete) {
+            result=1;
+        }
+
+        return result;
+    }
 })

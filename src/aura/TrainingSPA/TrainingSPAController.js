@@ -11,6 +11,9 @@
     runAsChanged : function(component, event, helper) {
         helper.runAsChanged(component, event);
     },
+    handleSearchEvent : function(component, event, helper) {
+        helper.handleSearchEvent(component, event);
+    },
     topicChanged : function(component, event, helper) {
         helper.topicChanged(component, event);
     },

@@ -87,4 +87,30 @@ private class TrainingServiceRemoteImpl_Test
         Test.stopTest();
         System.assertEquals(3, info.badges.size());
     }
+
+    @IsTest
+    static void TestFreeTextSearch()
+    {
+        SetupService();
+        Test.startTest();
+        TrainingServiceRemoteImpl service=new TrainingServiceRemoteImpl();
+        
+        List<TrainingPath> paths=service.SearchPathsFree('Mock', null);
+        Test.stopTest();
+        System.assertEquals(2, paths.size());
+    }
+
+    @IsTest
+    static void TestTopicSearch()
+    {
+        SetupService();
+        Test.startTest();
+        TrainingServiceRemoteImpl service=new TrainingServiceRemoteImpl();
+        
+        List<TrainingPath> paths=service.SearchPathsTopics('Mock', null);
+        Test.stopTest();
+        System.assertEquals(2, paths.size());
+    }
+
+
 }

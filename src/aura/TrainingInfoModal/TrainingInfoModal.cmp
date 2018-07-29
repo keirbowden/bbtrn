@@ -16,13 +16,19 @@
                     <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Bob Buzzard Training System V{!v.version}</h2>
                 </header>
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                    <div class="slds-text-heading_small">V1.5</div>
+                    <div class="slds-text-heading_small">V2.0</div>
+                    <ul>
+                        <li>Added free text search and topic search across all endpoints</li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                    <div class="slds-p-top_small slds-text-heading_small">V1.5</div>
                     <ul>
                         <li>TrainingSPA will look for endpoint, pathId and stepId parameters in the URL when initialising.</li>
-                        <li> If a user misses answering a question, now generates an error message</li>
+                        <li>If a user misses answering a question, now generates an error message</li>
                         <li>Handle scenario where a path doesn't have any topics</li>
                     </ul>
-                    <div class="slds-text-heading_small">V1.4</div>
+                    <div class="slds-p-top_small slds-text-heading_small">V1.4</div>
                     <ul>
                         <li>Added this info modal</li>
                         <li>Toggle paths view between card and list</li>
