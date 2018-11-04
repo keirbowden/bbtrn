@@ -29,7 +29,7 @@
         </div>
         <lightning:select name="selTopic" label="Restrict to topic" required="false" value="{!v.topic}">
             <aura:iteration items="{!v.allTopics}" var="topic">
-                <option value="{!topic}" text="{!topic}"></option>
+                <option value="{!topic}" text="{!topic}" selected="{!topic==v.topic}"></option>
             </aura:iteration>
         </lightning:select>
         <aura:if isTrue="{!v.userinfo.canRunAs}">

@@ -68,6 +68,11 @@
             if (stepIdFromURL) {
                 stepId=stepIdFromURL;
             }
+            // is there a topic specificed in the URL?
+            var topic=this.getURLParameter('topic');
+            if (topic) {
+                cmp.set('v.topic', topic);
+            }
             cmp.set('v.initialised', true);
         }
         cmp.set('v.selectedPathId', pathId);
@@ -115,7 +120,9 @@
         cmp.set('v.visiblePaths', visiblePaths);
     },
     topicChanged: function(cmp, ev) {
-        this.applyTopic(cmp, this, cmp.get('v.paths'));
+        if (cmp.get('v.initialised')) {
+            this.applyTopic(cmp, this, cmp.get('v.paths'));
+        }
     },
     gotInfo : function(cmp, helper, info) {
         console.log('Result = ' + info);

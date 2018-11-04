@@ -1,11 +1,12 @@
-<aura:component controller="TrainingHome" extends="c:TrainingBase">
-    <aura:attribute name="modalVisible" type="Boolean" default="false" />
+<aura:component controller="TrainingHome" extends="c:TrainingBase" implements="flexipage:availableForAllPageTypes">>
+    <aura:attribute name="modalVisible" type="Boolean" default="true" />
+    <aura:attribute name="trainingSPAURL" type="String" />
     <aura:attribute name="topic" type="String" />
     <aura:attribute name="paths" type="Map[]" />
 
     <aura:handler name="init" value="{!this}" action="{!c.init}" />
 
-    <c:TrainingAvailableModal topic="{!v.topic}" closeFunction="{!c.toggleModal}" visible="{!v.modalVisible}" paths="{!v.paths}" />
+    <c:TrainingAvailableModal trainingSPAURL="{!v.trainingSPAURL}" topic="{!v.topic}" closeFunction="{!c.toggleModal}" visible="{!v.modalVisible}" paths="{!v.paths}" />
     <lightning:button iconName="utility:user_role" iconPosition="left" onclick="{!c.toggleModal}"  />
 
 </aura:component>	

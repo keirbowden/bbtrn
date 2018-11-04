@@ -4,6 +4,7 @@
     <aura:attribute name="version" type="Decimal" />
     <aura:attribute name="topic" type="String" />
     <aura:attribute name="paths" type="Map[]" />
+    <aura:attribute name="trainingSPAURL" type="String" />
 
     <aura:if isTrue="{!v.visible}">
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1"
@@ -26,6 +27,9 @@
                     </ul>
                 </div>
                 <footer class="slds-modal__footer">
+                    <aura:if isTrue="{! !empty(v.trainingSPAURL)}">
+                        <button class="slds-button slds-button_brand" onclick="{!c.openTraining}">Open Training</button>
+                    </aura:if>
                     <button class="slds-button slds-button_neutral" onclick="{!v.closeFunction}">Close</button>
                 </footer>
             </div>

@@ -1,5 +1,5 @@
 ({
-    myAction : function(component, event, helper) {
-
+    openTraining : function(component, event, helper) {
+        helper.openTraining(component, event);
     }
 })

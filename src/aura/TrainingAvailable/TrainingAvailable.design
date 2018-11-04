@@ -1,3 +1,7 @@
 <design:component >
+    <design:attribute name="topic" label="Topic" 
+                     description="Training topic to search for availabiliy on."/>
+    <design:attribute name="trainingSPAURL" label="Training URL" 
+                     description="URL for page containing the traing single page application."/>
 
 </design:component>
