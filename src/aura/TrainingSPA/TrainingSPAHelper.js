@@ -68,11 +68,6 @@
             if (stepIdFromURL) {
                 stepId=stepIdFromURL;
             }
-            // is there a topic specificed in the URL?
-            var topic=this.getURLParameter('topic');
-            if (topic) {
-                cmp.set('v.topic', topic);
-            }
             cmp.set('v.initialised', true);
         }
         cmp.set('v.selectedPathId', pathId);
@@ -127,6 +122,16 @@
     gotInfo : function(cmp, helper, info) {
         console.log('Result = ' + info);
         cmp.set('v.userinfo', info);
+
+        // is there a topic specificed in the URL?
+        var topic=helper.getURLParameter('topic');
+        if (topic) {
+            var action=cmp.get('c.SearchPathsTopics');
+            var terms=topic;
+            cmp.set('v.searchInput', terms);
+            helper.doSearch(cmp, action, terms);
+        }
+        
         helper.hideWorking(cmp);
     },
     gotEndpoints : function(cmp, helper, endpoints) {
@@ -168,14 +173,17 @@
 
             var terms=ev.getParam('terms');
         
-            action.setParams({searchTerms: terms, runAsEmail: cmp.get('v.runAsEmail')});
-            var helper=this;
-            action.setCallback(helper, function(response) {
-                helper.actionResponseHandler(response, cmp, helper, helper.searched);
-            });
-            $A.enqueueAction(action);
-            this.showWorking(cmp);      
+            this.doSearch(cmp, action, searchTerms);
         }
+    },
+    doSearch : function(cmp, action, terms) {
+        action.setParams({searchTerms: terms, runAsEmail: cmp.get('v.runAsEmail')});
+        var helper=this;
+        action.setCallback(helper, function(response) {
+            helper.actionResponseHandler(response, cmp, helper, helper.searched);
+        });
+        $A.enqueueAction(action);
+        this.showWorking(cmp);      
     },
     searched : function(cmp, helper, paths) {
         helper.gotPaths(cmp, helper, paths);

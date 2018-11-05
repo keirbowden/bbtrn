@@ -19,6 +19,7 @@
     <aura:attribute name="endpoints" type="object" />
     <aura:attribute name="runAsEmail" type="String" />
     <aura:attribute name="version" type="Decimal" />
+    <aura:attribute name="searchInput" type="String" default=""/>
     <aura:attribute name="initialised" type="Boolean" default="false" />
 
     <div id="content" class="slds-m-around_medium">
@@ -46,7 +47,8 @@
             </lightning:layoutItem>
             <lightning:layoutItem size="3" class="bg-white">
                 <c:TrainingSidebar userinfo="{!v.userinfo}" endpoints="{!v.endpoints}" endpoint="{!v.endpoint}" 
-                                    allTopics="{!v.allTopics}" topic="{!v.topic}" runAsEmail="{!v.runAsEmail}" 
+                                    allTopics="{!v.allTopics}" topic="{!v.topic}" runAsEmail="{!v.runAsEmail}"
+                                    searchInput="{!v.searchInput}" 
                                     />
             </lightning:layoutItem>
         </lightning:layout>
