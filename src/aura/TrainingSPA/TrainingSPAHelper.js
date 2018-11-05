@@ -131,7 +131,7 @@
             cmp.set('v.searchInput', terms);
             helper.doSearch(cmp, action, terms);
         }
-        
+
         helper.hideWorking(cmp);
     },
     gotEndpoints : function(cmp, helper, endpoints) {
@@ -173,7 +173,7 @@
 
             var terms=ev.getParam('terms');
         
-            this.doSearch(cmp, action, searchTerms);
+            this.doSearch(cmp, action, terms);
         }
     },
     doSearch : function(cmp, action, terms) {
