@@ -16,7 +16,7 @@
                         <lightning:icon class="slds-button__icon slds-button__icon_large" iconName="utility:close" size="medium" />
                         <span class="slds-assistive-text">Close</span>
                     </button>
-                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Bob Buzzard Training System V{!v.version}</h2>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Training Available</h2>
                 </header>
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
                     <div class="slds-text-heading_small slds-p-bottom_small">The follow training is available for {!v.topic}</div>
