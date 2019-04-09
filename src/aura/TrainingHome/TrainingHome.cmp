@@ -6,21 +6,27 @@
     <aura:attribute name="displayAsTiles" type="Boolean" default="true" />
     <aura:attribute name="infoVisible" type="Boolean" default="false" />
     <aura:attribute name="version" type="Decimal" />
+    <aura:attribute name="showCompleted" type="Boolean" default="false" />
 
     <div class="slds-p-around_medium">
         <div class="slds-p-bottom_medium">
-            <lightning:button iconName="{!v.displayAsTiles?'utility:list':'utility:tile_card_list'}" iconPosition="left" onclick="{!c.toggleTiles}"  />
-            <lightning:button iconName="utility:info" iconPosition="left" onclick="{!c.toggleInfo}"  />
+            <lightning:button title="{!'View as ' + (v.displayAsTiles?'list':'tiles')}" iconName="{!v.displayAsTiles?'utility:list':'utility:tile_card_list'}" iconPosition="left" onclick="{!c.toggleTiles}"  />
+            <lightning:button title="{! (v.infoVisible?'Hide':'Show') + ' information'}" iconName="utility:info" iconPosition="left" onclick="{!c.toggleInfo}"  />
+            <lightning:button title="{! (v.showCompleted?'Hide':'Show') + ' completed paths'}" iconName="{!'utility:' + (v.showCompleted?'':'un') + 'deprecate'}" onclick="{!c.toggleShowCompleted}" />
         </div>
         <aura:if isTrue="{!v.displayAsTiles}">
             <lightning:layout horizontalAlign="slds-grid_align-space" class="main-grid slds-wrap">
                 <aura:iteration items="{!v.paths}" var="path">
-                    <c:TrainingPathTile path="{!path}" selectedPathId="{!v.selectedPathId}" />
+                    <aura:if isTrue="{! v.showCompleted || 100!=path.percentComplete}">
+                        <c:TrainingPathTile path="{!path}" selectedPathId="{!v.selectedPathId}" />
+                    </aura:if>
                 </aura:iteration>
             </lightning:layout>
             <aura:set attribute="else">
                 <aura:iteration items="{!v.paths}" var="path">
-                    <c:TrainingPathListItem path="{!path}" selectedPathId="{!v.selectedPathId}" />
+                    <aura:if isTrue="{! v.showCompleted || 100!=path.percentComplete}">
+                        <c:TrainingPathListItem path="{!path}" selectedPathId="{!v.selectedPathId}" />
+                    </aura:if>
                 </aura:iteration>
             </aura:set>
         </aura:if>

@@ -1,5 +1,17 @@
 # Changelog
 
+## [v2.1](https://github.com/keirbowden/bbtrn/releases/tag/V2.1) (2019-04-09)
+[Full Changelog](https://github.com/keirbowden/bbtrn/compare/V2.0...V2.1)
+
+**Implemented enhancements:**
+
+- Default completed paths to hidden
+- Toggle visibility of completed paths
+
+**Fixed bugs:**
+
+- 
+
 ## [v2.0](https://github.com/keirbowden/bbtrn/releases/tag/V2.0) (2018-07-29)
 [Full Changelog](https://github.com/keirbowden/bbtrn/compare/V1.5...V2.0)
 

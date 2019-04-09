@@ -16,7 +16,7 @@ public with sharing class TrainingServiceRemoteImpl implements TrainingServiceIF
     public static final String STEP_ID_PARAM='stepIdStr';
     public static final String SEARCH_TERMS_PARAM='searchTerms';
 
-    public static final Decimal VERSION=2.0;
+    public static final Decimal VERSION=2.1;
 
     private static final String DEFAULT_ENDPOINT_NAME='Bob_Buzzard';
     private static String endpointName;
